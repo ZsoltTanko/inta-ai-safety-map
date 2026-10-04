@@ -167,24 +167,24 @@ body{width:1400px;padding:56px 64px 64px}
 header{text-align:center;margin-bottom:36px}
 .eb{font:500 15px/1 "Atkinson Hyperlegible Mono",monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
 h1{font:500 64px/1.05 "Newsreader",serif;margin:14px 0;letter-spacing:-.01em}
-.lede{font:400 23px/1.45 "Newsreader",serif;color:var(--ink-2);max-width:880px;margin:0 auto 26px}
-.legend{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 26px;font-size:16px;color:var(--ink-2)}
+.lede{font:400 27px/1.45 "Newsreader",serif;color:var(--ink-2);max-width:880px;margin:0 auto 26px}
+.legend{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 26px;font-size:20px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:8px}
 i{display:inline-block;width:12px;height:12px;border-radius:50%;flex:none}
 i.a{background:var(--s1)}i.r{background:var(--s2)}i.s{background:var(--s3)}i.c{background:var(--s4)}i.x{border:1.6px solid var(--s0);background:transparent}
 .inputs{display:flex;justify-content:center;gap:14px}
-.inputs span{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 18px;font-size:17px;color:var(--ink-2)}
-.stage{display:grid;grid-template-columns:330px 1fr 270px;gap:30px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 30px}
+.inputs span{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 20px;font-size:20px;color:var(--ink-2)}
+.stage{display:grid;grid-template-columns:360px 1fr 270px;gap:30px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 30px}
 .meta .no{font:500 15px/1 "Atkinson Hyperlegible Mono",monospace;color:var(--ink-3);margin-bottom:8px}
-.meta h2{font:500 30px/1.1 "Newsreader",serif;margin:0 0 10px}
-.meta p{margin:0;font-size:16px;line-height:1.5;color:var(--ink-2)}
+.meta h2{font:500 34px/1.1 "Newsreader",serif;margin:0 0 10px}
+.meta p{margin:0;font-size:20px;line-height:1.45;color:var(--ink-2)}
 .swarm{display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-start}
 .grp .dots{display:flex;flex-wrap:wrap;gap:5px;max-width:368px}
-.grp .gl{font-size:15px;color:var(--ink-2);margin-top:9px}
-.grp .gl b{font:600 15px "Atkinson Hyperlegible Mono",monospace;color:var(--ink)}
+.grp .gl{font-size:19px;color:var(--ink-2);margin-top:9px}
+.grp .gl b{font:600 19px "Atkinson Hyperlegible Mono",monospace;color:var(--ink)}
 .out{text-align:right}
 .out .big{white-space:nowrap;font:500 52px/1 "Newsreader",serif;letter-spacing:-.01em;font-variant-numeric:lining-nums}
-.out .ol{font-size:15px;line-height:1.35;color:var(--ink-3);margin-top:8px}
+.out .ol{font-size:19px;line-height:1.35;color:var(--ink-3);margin-top:8px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .stage.half{grid-template-columns:1fr;gap:16px;align-items:start}
 .stage.half .out{text-align:left;display:flex;align-items:baseline;gap:14px}
@@ -192,14 +192,14 @@ i.a{background:var(--s1)}i.r{background:var(--s2)}i.s{background:var(--s3)}i.c{b
 .flow{display:flex;flex-direction:column;align-items:center;padding:6px 0}
 .flow .line{width:2px;height:22px;background:var(--line)}
 .flow .arrow{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid var(--line)}
-.flow .lbl{font:italic 400 18px/1.3 "Newsreader",serif;color:var(--ink-3);padding:6px 0}
-.flow .pill{display:inline-flex;align-items:center;gap:10px;border:1.5px dashed var(--ink-3);border-radius:999px;padding:9px 18px;font-size:16px;color:var(--ink);background:var(--bg);margin:4px 0}
+.flow .lbl{font:italic 400 22px/1.3 "Newsreader",serif;color:var(--ink-3);padding:6px 0}
+.flow .pill{display:inline-flex;align-items:center;gap:10px;border:1.5px dashed var(--ink-3);border-radius:999px;padding:10px 20px;font-size:19px;color:var(--ink);background:var(--bg);margin:4px 0}
 .flow .pill .ms{width:14px;height:14px;border-radius:50%;border:3px solid var(--ink);flex:none}
 .flow .pill::before{content:"Main session";font:500 13px "Atkinson Hyperlegible Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
 .outputs{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .outputs div{border:2px solid var(--ink);border-radius:14px;padding:24px 28px;background:var(--surface)}
 .outputs h3{font:500 32px/1.1 "Newsreader",serif;margin:0 0 10px}
-.outputs p{margin:0;font-size:17px;line-height:1.5;color:var(--ink-2)}"""
+.outputs p{margin:0;font-size:20px;line-height:1.5;color:var(--ink-2)}"""
 
 def pipeline(dark):
     body = ''.join([
