@@ -1,0 +1,82 @@
+{
+ "n": 83,
+ "facets": [
+  {
+   "facet": "home tradition",
+   "kappa_AB": 0.99,
+   "agree_AB": 0.99,
+   "kappa_vs_profiler": 0.98,
+   "agree_vs_profiler": 0.98
+  },
+  {
+   "facet": "ring",
+   "kappa_AB": 0.93,
+   "agree_AB": 0.95,
+   "kappa_vs_profiler": 0.83,
+   "agree_vs_profiler": 0.88
+  },
+  {
+   "facet": "primary problem",
+   "kappa_AB": 0.93,
+   "agree_AB": 0.94,
+   "kappa_vs_profiler": 0.89,
+   "agree_vs_profiler": 0.9
+  },
+  {
+   "facet": "primary quadrant",
+   "kappa_AB": 0.95,
+   "agree_AB": 0.96,
+   "kappa_vs_profiler": 0.93,
+   "agree_vs_profiler": 0.95
+  },
+  {
+   "facet": "transfer",
+   "kappa_AB": 0.87,
+   "agree_AB": 0.9,
+   "kappa_vs_profiler": 0.87,
+   "agree_vs_profiler": 0.9
+  },
+  {
+   "facet": "framing",
+   "kappa_AB": 0.82,
+   "agree_AB": 0.87,
+   "kappa_vs_profiler": 0.73,
+   "agree_vs_profiler": 0.8
+  },
+  {
+   "facet": "way of knowing",
+   "kappa_AB": 0.88,
+   "agree_AB": 0.9,
+   "kappa_vs_profiler": 0.83,
+   "agree_vs_profiler": 0.87
+  },
+  {
+   "facet": "organisation type",
+   "kappa_AB": 0.97,
+   "agree_AB": 0.98,
+   "kappa_vs_profiler": 0.87,
+   "agree_vs_profiler": 0.89
+  }
+ ],
+ "sets": [
+  {
+   "facet": "all problems (Jaccard)",
+   "AB": 0.9,
+   "vs_profiler": 0.77
+  },
+  {
+   "facet": "all traditions (Jaccard)",
+   "AB": 0.84,
+   "vs_profiler": 0.79
+  },
+  {
+   "facet": "roles (Jaccard)",
+   "AB": 0.88,
+   "vs_profiler": 0.78
+  }
+ ],
+ "profiler_matches_at_least_one_coder": {
+  "home tradition": 0.99,
+  "ring": 0.9
+ }
+}

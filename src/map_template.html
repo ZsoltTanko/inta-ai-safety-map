@@ -1,0 +1,1134 @@
+<title>The Wider Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a survey wheel. Traditions are sectors, rings are distance from the AI-safety core; filters on the left, a reading panel on the right. */
+:root{
+  --bg:#f1f2ee; --surface:#fafbf8; --sunk:#e7e9e3; --ink:#17201e; --ink-2:#46514e; --ink-3:#6c7773; --line:#cdd3cb; --line-2:#e0e4de;
+  --s1:#3c56ac; --s2:#d35985; --s3:#a97416; --s4:#04785d; --s0:#8a918d;
+  --focus:#3c56ac; --warn:#8a5200; --warn-bg:#f5ead6; --hatch:#bfc6be; --hilite:#17201e;
+  --display:"Newsreader","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Atkinson Hyperlegible Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --t-xs:.75rem; --t-sm:.8125rem; --t-md:.9375rem; --t-lg:1.125rem; --t-xl:1.5rem; --t-2xl:2.125rem;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121716; --surface:#192120; --sunk:#0d1211; --ink:#e4e9e3; --ink-2:#adb6b1; --ink-3:#7f8985; --line:#2d3836; --line-2:#212a28;
+  --s1:#6581d4; --s2:#cf5d85; --s3:#ac7d1b; --s4:#04896a; --s0:#737b77;
+  --focus:#8aa1ea; --warn:#e5b866; --warn-bg:#2a2417; --hatch:#36423f; --hilite:#f4f6f2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121716; --surface:#192120; --sunk:#0d1211; --ink:#e4e9e3; --ink-2:#adb6b1; --ink-3:#7f8985; --line:#2d3836; --line-2:#212a28;
+  --s1:#6581d4; --s2:#cf5d85; --s3:#ac7d1b; --s4:#04896a; --s0:#737b77;
+  --focus:#8aa1ea; --warn:#e5b866; --warn-bg:#2a2417; --hatch:#36423f; --hilite:#f4f6f2; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:400 var(--t-md)/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration-color:var(--ink-3);text-underline-offset:2px}
+a:hover{text-decoration-color:var(--ink)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+h1,h2,h3{text-wrap:balance}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font:500 var(--t-xs)/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.muted{color:var(--ink-3)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- frame ---------- */
+.app{min-height:100%;display:flex;flex-direction:column}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line);padding-inline:max(16px,2vw)}
+.top-row{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-block:12px}
+.brand{display:flex;align-items:baseline;gap:12px;min-width:0;margin-right:auto}
+.brand h1{font:500 1.6rem/1 var(--display);letter-spacing:-.01em;margin:0;white-space:nowrap}
+.brand h1 i{font-weight:400}
+.brand p{margin:0;color:var(--ink-3);font-size:var(--t-sm);min-width:0}
+.search{position:relative;flex:1 1 240px;max-width:360px}
+.search input{width:100%;height:36px;border:1px solid var(--line);border-radius:999px;background:var(--surface);padding:0 34px 0 14px}
+.search input::placeholder{color:var(--ink-3)}
+.search kbd{position:absolute;right:10px;top:8px;font:500 11px/18px var(--mono);color:var(--ink-3);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.tabs{display:flex;gap:2px;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.tabs button{border:0;background:none;border-radius:999px;padding:5px 13px;font-size:var(--t-sm);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:var(--t-sm);color:var(--ink)}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn.ghost{background:none;border-color:transparent;color:var(--ink-2)}
+.btn.ghost:hover{border-color:var(--line)}
+#filterToggle{display:none}
+
+.personas{display:flex;gap:8px;align-items:center;overflow-x:auto;padding-block:0 12px;scrollbar-width:thin}
+.personas .eyebrow{flex:none;margin-right:2px}
+.persona{flex:none;border:1px solid var(--line);background:none;border-radius:999px;padding:5px 12px;font-size:var(--t-sm);color:var(--ink-2)}
+.persona:hover{border-color:var(--ink-3);color:var(--ink)}
+.persona[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--surface)}
+
+.main{flex:1;display:grid;grid-template-columns:272px minmax(0,1fr) minmax(340px,410px);min-height:0}
+.filters{border-right:1px solid var(--line);padding:16px max(16px,1vw) 40px;overflow:auto;max-height:calc(100vh - var(--top-h,120px));position:sticky;top:var(--top-h,120px);align-self:start}
+.stage{min-width:0;padding:16px max(16px,1.5vw) 40px;display:flex;flex-direction:column;gap:14px}
+.panel{border-left:1px solid var(--line);background:var(--surface);min-width:0;overflow:auto;max-height:calc(100vh - var(--top-h,120px));position:sticky;top:var(--top-h,120px);align-self:start}
+.panel-inner{padding:20px 22px 48px}
+.panel-close{display:none}
+
+/* ---------- filters ---------- */
+.fhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:12px}
+.fhead strong{font:600 var(--t-lg)/1.2 var(--sans)}
+.fcount{font:500 var(--t-sm)/1.4 var(--mono);color:var(--ink-2)}
+.toggle{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line-2);font-size:var(--t-sm);color:var(--ink-2)}
+.toggle input{margin-top:3px;accent-color:var(--ink)}
+.fgroup{border-top:1px solid var(--line-2);padding:12px 0 4px}
+.fgroup>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:8px}
+.fgroup>summary::-webkit-details-marker{display:none}
+.fgroup>summary::after{content:"+";font:400 15px/1 var(--mono);color:var(--ink-3)}
+.fgroup[open]>summary::after{content:"–"}
+.fgroup>summary .eyebrow{color:var(--ink-2)}
+.fsub{font:500 11px/1.3 var(--mono);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;margin:8px 0 5px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.fchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 9px;font-size:var(--t-xs);color:var(--ink-2);line-height:1.4}
+.fchip .n{font:500 10px/1 var(--mono);color:var(--ink-3)}
+.fchip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.fchip[aria-pressed="true"] .n{color:var(--bg);opacity:.75}
+.fchip:disabled{opacity:.4;cursor:default}
+.lensnote{font-size:var(--t-xs);color:var(--ink-3);margin:4px 0 8px}
+
+/* ---------- stage ---------- */
+.lens{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:12px 14px}
+.lens h2{font:500 var(--t-lg)/1.25 var(--display);margin:0 0 4px}
+.lens p{margin:0;font-size:var(--t-sm);color:var(--ink-2);max-width:72ch}
+.lens .btn{margin-left:auto;flex:none}
+.active-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:var(--t-sm)}
+.active-filters .afchip{border:1px solid var(--ink);border-radius:999px;padding:2px 4px 2px 10px;display:inline-flex;align-items:center;gap:4px;font-size:var(--t-xs);background:var(--surface)}
+.active-filters .afchip button{border:0;background:none;width:18px;height:18px;border-radius:50%;line-height:1;color:var(--ink-2)}
+.active-filters .afchip button:hover{background:var(--sunk)}
+
+.wheel-wrap{display:flex;flex-direction:column;gap:18px}
+.wheel-box{position:relative;width:100%;max-width:min(100%,calc(100vh - var(--top-h,120px) - 40px));margin-inline:auto;aspect-ratio:1}
+.wheel-box svg{width:100%;height:100%;display:block;overflow:visible}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px 28px;font-size:var(--t-sm);border-top:1px solid var(--line-2);padding-top:14px}
+.legend .lg{display:flex;flex-direction:column;gap:6px}
+.legend select{width:100%;height:32px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:0 8px;font-size:var(--t-sm)}
+.lgitem{display:flex;gap:8px;align-items:center;border:0;background:none;padding:2px 0;text-align:left;color:var(--ink-2);font-size:var(--t-sm)}
+.lgitem svg{flex:none}
+.lgitem[aria-pressed="true"]{color:var(--ink);font-weight:600}
+.lgitem.off{opacity:.45}
+.lgitem .n{margin-left:auto;font:500 11px/1 var(--mono);color:var(--ink-3)}
+.ringdiag{width:100%;max-width:240px;height:auto}
+.ringdiag text{font:500 9px var(--mono);fill:var(--ink-2);text-anchor:middle;letter-spacing:.04em}
+.ringdiag path{fill:none;stroke:var(--ink-3);stroke-width:.8}
+.ringdiag .disc{fill:var(--surface);stroke:var(--ink-3)}
+.legend p{margin:0;color:var(--ink-3);font-size:var(--t-xs)}
+
+/* wheel svg */
+.w-cell{fill:transparent;stroke:none;cursor:pointer}
+.w-cell:hover{fill:var(--sunk)}
+.w-cell.empty{fill:url(#hatch)}
+.w-cell.empty:hover{fill:var(--sunk)}
+.w-cell.sel{fill:var(--sunk)}
+.w-ring{fill:none;stroke:var(--line);stroke-width:1}
+.w-ring.outer{stroke:var(--ink-3);stroke-width:1}
+.w-spoke{stroke:var(--line);stroke-width:1}
+.w-spoke.fam{stroke:var(--ink-3);stroke-width:1.25}
+.hatch line{stroke:var(--hatch);stroke-width:1.2}
+.w-center{fill:var(--surface);stroke:var(--ink-3)}
+.w-center-t{font:italic 500 27px var(--display);fill:var(--ink);text-anchor:middle}
+.w-center-s{font:500 12px var(--mono);fill:var(--ink-3);text-anchor:middle;letter-spacing:.12em}
+.w-slabel{font:600 21px var(--sans);fill:var(--ink);cursor:pointer}
+.w-slabel .n{font:500 16px var(--mono);fill:var(--ink-3)}
+.w-slabel:hover,.w-slabel.on{fill:var(--focus)}
+.w-slabel:focus-visible{outline:none;fill:var(--focus);text-decoration:underline}
+.w-flabel{font:500 14px var(--mono);letter-spacing:.16em;fill:var(--ink-3);text-transform:uppercase}
+.w-farc{fill:none;stroke:var(--ink-3);stroke-width:1}
+.dot{stroke:var(--surface);stroke-width:1.6;transition:opacity .15s}
+.dot.cm{stroke:var(--ink);stroke-width:1.3}
+.s0{fill:var(--s0)} .s1{fill:var(--s1)} .s2{fill:var(--s2)} .s3{fill:var(--s3)} .s4{fill:var(--s4)}
+.dim .dot{opacity:.12}
+.dim .dot.hit{opacity:1}
+.dot.sel{stroke:var(--hilite);stroke-width:2.6}
+.hitc{fill:transparent;cursor:pointer}
+.w-band{fill:none;stroke:var(--line);stroke-dasharray:2 4}
+.fund{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.4;cursor:pointer}
+.fund.hit{fill:var(--ink)}
+.dim .fund{opacity:.25}
+.dim .fund.hit{opacity:1}
+.spokeln{fill:none;stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:3 3;pointer-events:none}
+.w-gap{font:500 13px var(--mono);fill:var(--ink-3);text-anchor:middle;pointer-events:none}
+
+.tip{position:fixed;z-index:60;pointer-events:none;max-width:300px;background:var(--ink);color:var(--bg);border-radius:var(--r);padding:8px 10px;font-size:var(--t-xs);line-height:1.45;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.tip b{font:600 var(--t-sm)/1.3 var(--sans);display:block;margin-bottom:2px}
+.tip .k{font:500 10px/1.3 var(--mono);opacity:.75;text-transform:uppercase;letter-spacing:.06em}
+
+/* matrix */
+.mx-wrap{overflow:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.mx{border-collapse:separate;border-spacing:0;font-size:var(--t-xs)}
+.mx th,.mx td{padding:0}
+.mx thead th{height:112px;vertical-align:bottom;background:none}
+.mx thead th div{transform:translateX(14px) rotate(-52deg);transform-origin:left bottom;white-space:nowrap;width:30px;padding-left:4px;font-weight:600;color:var(--ink-2)}
+.mx thead th.arc div{color:var(--ink-3);font:500 10px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.mx tbody th{position:sticky;left:0;background:var(--surface);text-align:left;font-weight:600;padding:0 12px 0 12px;white-space:nowrap;color:var(--ink-2);border-right:1px solid var(--line-2);z-index:1}
+.mx tbody tr.fam th{font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:10px}
+.mx td button{width:34px;height:32px;border:0;background:none;display:grid;place-items:center;position:relative}
+.mx td button:hover{background:var(--sunk)}
+.mx td.sep,.mx th.sep{border-left:1px solid var(--line)}
+.mx .blob{border-radius:50%;background:var(--ink);opacity:.85}
+.mx .zero{width:4px;height:4px;border-radius:50%;background:var(--hatch)}
+.mx td .cnt{position:absolute;font:500 9px var(--mono);color:var(--bg);pointer-events:none}
+.mx tfoot td,.mx tfoot th{font:500 10px var(--mono);color:var(--ink-3);text-align:center;padding:6px 0}
+.mx tbody td.tot{font:500 10px var(--mono);color:var(--ink-3);padding:0 8px;text-align:right}
+.mx-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:var(--t-sm);color:var(--ink-2)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--surface)}
+.seg button{border:0;background:none;border-radius:999px;padding:3px 10px;font-size:var(--t-xs);color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* directory */
+.dir-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:var(--t-sm);color:var(--ink-2)}
+.dir-controls select{height:32px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:0 8px}
+.dir{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.card{display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:12px 14px;min-width:0}
+.card:hover{border-color:var(--ink-3)}
+.card.sel{border-color:var(--ink)}
+.card .nm{font:600 var(--t-md)/1.3 var(--sans);display:flex;gap:8px;align-items:flex-start}
+.card .nm svg{flex:none;margin-top:4px}
+.card .meta{font:500 11px/1.4 var(--mono);color:var(--ink-3)}
+.card p{margin:0;font-size:var(--t-sm);color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tagrow{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:11px;line-height:1.35;border:1px solid var(--line);border-radius:999px;padding:1px 7px;color:var(--ink-2);white-space:nowrap}
+.tag.ring{border-style:dashed}
+.tag.cm{border-color:var(--ink-2);color:var(--ink)}
+.tag.warn{border-color:var(--warn);color:var(--warn)}
+
+/* openings */
+.op-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ops{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.op{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.op h3{font:500 var(--t-lg)/1.3 var(--display);margin:0}
+.op p{margin:0;font-size:var(--t-sm);color:var(--ink-2)}
+.op .who{display:flex;gap:6px;flex-wrap:wrap}
+.op .who span{font:500 10px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.06em;border-radius:3px;padding:1px 6px;background:var(--sunk);color:var(--ink-2)}
+.op .who span.rk{background:none;border:1px solid var(--line);color:var(--ink)}
+.op .who span.st{background:var(--ink);color:var(--bg)}
+.op.top{border-color:var(--ink-3)}
+.op details summary{cursor:pointer;font-size:var(--t-sm);color:var(--ink-2)}
+.op details[open] summary{margin-bottom:6px}
+.op ul{margin:0;padding-left:18px;font-size:var(--t-sm);color:var(--ink-2)}
+.linkchips{display:flex;flex-wrap:wrap;gap:5px}
+.lc{border:1px solid var(--line);background:none;border-radius:999px;padding:2px 9px;font-size:11px;color:var(--ink)}
+.lc:hover{border-color:var(--ink)}
+.empty-state{border:1px dashed var(--line);border-radius:var(--r);padding:28px;color:var(--ink-3);text-align:center}
+
+/* guide */
+.guide{max-width:820px;display:flex;flex-direction:column;gap:22px}
+.guide h2{font:500 var(--t-xl)/1.2 var(--display);margin:0}
+.guide h3{font:600 var(--t-md)/1.3 var(--sans);margin:0 0 6px}
+.guide p,.guide li{font-size:var(--t-md);color:var(--ink-2);max-width:68ch}
+.guide p{margin:0 0 10px}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px 22px}
+.gloss div{font-size:var(--t-sm);color:var(--ink-2)}
+.gloss b{color:var(--ink);font-weight:600}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.pcard{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--surface);text-align:left;display:flex;flex-direction:column;gap:4px}
+.pcard:hover{border-color:var(--ink)}
+.pcard b{font:500 var(--t-lg)/1.25 var(--display)}
+.pcard span{font-size:var(--t-sm);color:var(--ink-2)}
+
+/* panel */
+.p-eyebrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.p-title{font:500 var(--t-2xl)/1.1 var(--display);margin:0 0 6px;letter-spacing:-.01em;overflow-wrap:anywhere}
+.p-sub{font:500 var(--t-xs)/1.5 var(--mono);color:var(--ink-3);margin:0 0 14px}
+.p-lede{font-size:var(--t-md);margin:0 0 14px}
+.p-why{border-left:3px solid var(--ink);padding:2px 0 2px 12px;margin:0 0 16px;font:italic 400 1.05rem/1.45 var(--display);color:var(--ink)}
+.p-sec{border-top:1px solid var(--line-2);padding:12px 0}
+.p-sec h3{font:500 var(--t-xs)/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
+.p-sec p{margin:0;font-size:var(--t-sm);color:var(--ink-2)}
+.p-sec ul{margin:0;padding-left:18px;font-size:var(--t-sm);color:var(--ink-2)}
+.p-sec li{margin-bottom:3px}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:var(--t-sm)}
+.kv dt{color:var(--ink-3)}
+.kv dd{margin:0;color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+.caveat{background:var(--warn-bg);color:var(--ink);border-radius:var(--r);padding:10px 12px;font-size:var(--t-sm);margin:0 0 14px}
+.caveat b{color:var(--warn)}
+.p-actions{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.minilist{display:flex;flex-direction:column;gap:2px}
+.minilist button{display:flex;gap:8px;align-items:baseline;border:0;background:none;text-align:left;padding:4px 6px;border-radius:4px;font-size:var(--t-sm);color:var(--ink)}
+.minilist button:hover{background:var(--sunk)}
+.minilist button span{color:var(--ink-3);font-size:11px;margin-left:auto;font-family:var(--mono);white-space:nowrap}
+.bars{display:flex;flex-direction:column;gap:5px}
+.bar{display:grid;grid-template-columns:76px 1fr 30px;gap:8px;align-items:center;font-size:var(--t-xs);color:var(--ink-2)}
+.bar i{display:block;height:8px;border-radius:0 4px 4px 0;background:var(--ink-2)}
+.bar span:last-child{font-family:var(--mono);text-align:right;color:var(--ink-3)}
+.stat{display:flex;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line-2)}
+.stat b{font:500 1.6rem/1 var(--display);min-width:3.2ch;font-variant-numeric:tabular-nums}
+.stat span{font-size:var(--t-sm);color:var(--ink-2)}
+.ask-box{display:flex;flex-direction:column;gap:8px}
+.ask-box textarea{min-height:80px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);padding:10px;resize:vertical}
+.ask-ans{font-size:var(--t-md);white-space:pre-wrap}
+.ask-ex{display:flex;flex-direction:column;gap:4px}
+.ask-ex button{border:0;background:none;text-align:left;color:var(--ink-2);font-size:var(--t-sm);padding:2px 0;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.copyrow{display:flex;gap:8px;align-items:center}
+.copyrow code{font:500 var(--t-xs) var(--mono);background:var(--sunk);padding:4px 8px;border-radius:4px;overflow-wrap:anywhere}
+.suggest textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);padding:10px;font:500 var(--t-xs)/1.5 var(--mono)}
+
+footer.foot{border-top:1px solid var(--line);padding:14px max(16px,2vw);font-size:var(--t-xs);color:var(--ink-3);display:flex;gap:16px;flex-wrap:wrap}
+footer.foot button,footer.foot a{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink-2);font-size:var(--t-xs)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1240px){
+  .main{grid-template-columns:minmax(0,1fr) minmax(320px,380px)}
+  .filters{position:fixed;inset:0 auto 0 0;width:min(320px,88vw);max-height:none;top:0;background:var(--bg);z-index:50;transform:translateX(-102%);transition:transform .2s;box-shadow:0 0 40px rgba(0,0,0,.2);padding-top:calc(16px + env(safe-area-inset-top,0px))}
+  .filters.open{transform:none}
+  #filterToggle{display:inline-flex}
+  .filters .fclose{display:inline-flex}
+}
+@media (max-width:900px){
+  .main{grid-template-columns:minmax(0,1fr)}
+  .panel{position:fixed;inset:auto 0 0 0;max-height:82vh;top:auto;border-left:0;border-top:1px solid var(--line);z-index:45;border-radius:14px 14px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.2);transform:translateY(105%);transition:transform .2s;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .panel.open{transform:none}
+  .panel-close{display:inline-flex;position:sticky;top:0;float:right;margin:10px 10px 0 0;z-index:2}
+  .wheel-wrap{grid-template-columns:minmax(0,1fr)}
+  .legend{flex-direction:row;flex-wrap:wrap}
+  .legend .lg{flex:1 1 200px}
+  .brand p{display:none}
+  .top-row{gap:10px}
+  .search{order:3;flex-basis:100%;max-width:none}
+  .tabs{order:4;overflow-x:auto;max-width:100%}
+  .ops,.dir{grid-template-columns:minmax(0,1fr)}
+}
+.fclose{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="top-row">
+      <div class="brand">
+        <h1>The <i>Wider</i> Field</h1>
+        <p id="tagline">Adjacent fields of AI safety, mapped for integral altruism</p>
+      </div>
+      <button class="btn" id="filterToggle" aria-controls="filters" aria-expanded="false">Filters <span class="mono" id="filterBadge"></span></button>
+      <label class="search"><span class="sr">Search organisations</span><input id="q" type="search" placeholder="Search names, people, ideas…" autocomplete="off"><kbd aria-hidden="true">/</kbd></label>
+      <div class="tabs" role="tablist" aria-label="Views">
+        <button role="tab" data-view="wheel" aria-selected="true">Wheel</button>
+        <button role="tab" data-view="matrix" aria-selected="false">Matrix</button>
+        <button role="tab" data-view="directory" aria-selected="false">Directory</button>
+        <button role="tab" data-view="openings" aria-selected="false">Openings</button>
+        <button role="tab" data-view="guide" aria-selected="false">Guide</button>
+      </div>
+      <button class="btn" id="askBtn" hidden>Ask the map</button>
+    </div>
+    <div class="personas" role="group" aria-label="Start from where you stand">
+      <span class="eyebrow">Start as</span>
+      <div id="personaBtns" style="display:contents"></div>
+    </div>
+  </header>
+
+  <div class="main">
+    <aside class="filters" id="filters" aria-label="Filters">
+      <div class="fhead"><strong>Filters</strong><button class="btn ghost fclose" id="filterClose">Close</button></div>
+      <div class="fhead"><span class="fcount" id="fcount"></span><button class="btn ghost" id="clearAll">Clear all</button></div>
+      <label class="toggle"><input type="checkbox" id="notOnMap"><span>Hide entries already on the aisafety.com field map</span></label>
+      <div id="facets"></div>
+    </aside>
+
+    <main class="stage" id="stage">
+      <div class="lens" id="lens" hidden></div>
+      <div class="active-filters" id="activeFilters"></div>
+
+      <section id="view-wheel" aria-label="Wheel">
+        <div class="wheel-wrap">
+          <div class="wheel-box"><svg id="wheel" viewBox="-62 -62 1124 1124" role="img" aria-labelledby="wheelTitle"><title id="wheelTitle">Wheel of traditions and rings of proximity to the AI-safety core</title></svg></div>
+          <div class="legend" id="legend"></div>
+        </div>
+      </section>
+      <section id="view-matrix" aria-label="Matrix" hidden></section>
+      <section id="view-directory" aria-label="Directory" hidden></section>
+      <section id="view-openings" aria-label="Openings" hidden></section>
+      <section id="view-guide" aria-label="Guide" hidden></section>
+    </main>
+
+    <aside class="panel" id="panel" aria-live="polite">
+      <button class="btn panel-close" id="panelClose">Close</button>
+      <div class="panel-inner" id="panelInner"></div>
+    </aside>
+  </div>
+  <footer class="foot" id="foot"></footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script id="wf-data" type="application/json">__DATA__</script>
+<script>
+(function(){
+"use strict";
+const DATA = JSON.parse(document.getElementById('wf-data').textContent);
+const ORGS = DATA.orgs;
+const byId = new Map(ORGS.map(o => [o.id, o]));
+const V = DATA.vocab;
+const VL = {}; for (const f in V) VL[f] = new Map(V[f].map(c => [c.key, c]));
+const lab = (f, k) => (VL[f] && VL[f].get(k) || {}).label || k;
+const chipL = (f, k) => (VL[f] && VL[f].get(k) || {}).chip || lab(f, k);
+const def = (f, k) => (VL[f] && VL[f].get(k) || {}).definition || '';
+const SECTORS = DATA.sectorOrder;
+const FAMILIES = DATA.families;
+const famOf = {}; FAMILIES.forEach(f => f.sectors.forEach(s => famOf[s] = f.key));
+const ARCS = DATA.arcs;
+const arcOf = {}; ARCS.forEach(a => a.problems.forEach(p => arcOf[p] = a.key));
+const RINGS = ['core', 'bridge', 'adjacent', 'potential'];
+const RING_LABEL = {core: 'Core', bridge: 'Bridge', adjacent: 'Adjacent', potential: 'Potential'};
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+const $ = s => document.querySelector(s);
+const home = o => o.tr[0];
+
+/* ---------- facets ---------- */
+const FACETS = [
+  {key: 'r', vocab: 'ring', label: 'Ring of proximity', multi: false, open: true, note: 'Distance from the AI-safety core, not rank or worth.'},
+  {key: 'tr', vocab: 'tradition', label: 'Home tradition', multi: true, open: true, group: 'family', homeOnly: true},
+  {key: 'p', vocab: 'problem', label: 'Problem addressed', multi: true, open: true, group: 'arc'},
+  {key: 'ro', vocab: 'role', label: 'What it does', multi: true},
+  {key: 'eg', vocab: 'engagement', label: 'How to get involved', multi: true},
+  {key: 'ot', vocab: 'org_type', label: 'Type', multi: false},
+  {key: 'rg', vocab: 'region', label: 'Region', multi: false},
+  {key: 'ss', vocab: 'status', label: 'Status', multi: false},
+  {key: 'q', vocab: 'quadrant', label: 'Integral quadrant', multi: true, lens: true, note: 'What the work attends to: inner experience (I), shared meaning (We), mechanisms (It) or collective systems (Its).'},
+  {key: 'tf', vocab: 'transfer', label: 'What flows where', multi: false, lens: true, note: 'Who or what changes because of the work.'},
+  {key: 'fr', vocab: 'framing', label: 'What is at stake', multi: false, lens: true},
+  {key: 'wk', vocab: 'way_of_knowing', label: 'Way of knowing', multi: false, lens: true},
+  {key: 'hb', vocab: 'inta_hub', label: 'Near an int/a hub', multi: true, lens: true},
+  {key: 'sp', vocab: 'standpoint', label: 'Standpoint', multi: false, lens: true},
+  {key: 'b', vocab: 'badges', label: 'int/a principle badges', multi: true, lens: true, note: 'Sparse markers of clear exemplars of an int/a principle. Not a ranking.'},
+];
+const orgVals = (o, f) => {
+  const v = o[f.key];
+  if (f.key === 'tr') return [home(o)];
+  return Array.isArray(v) ? v : (v == null || v === '' ? [] : [v]);
+};
+
+const state = {view: 'wheel', sel: {}, notOnMap: false, q: '', layer: 'arc', layerOff: new Set(), selected: null, focus: null, persona: null, ask: null, mxMode: 'any', dirSort: 'sector', opKind: 'all'};
+FACETS.forEach(f => state.sel[f.key] = new Set());
+
+/* ---------- search ---------- */
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+ORGS.forEach(o => {
+  o._idx = norm([o.n, o.s, o.sum, o.why, (o.pp || []).join(' '), o.hq, (o.kw || []).map(k => k[0]).join(' '), o.tr.map(t => lab('tradition', t)).join(' '), (o.p || []).map(p => lab('problem', p)).join(' '), o.st ? lab('sub_tradition', o.st) : ''].join(' '));
+  o._name = norm(o.n + ' ' + (o.s || ''));
+});
+function matchesSearch(o) {
+  if (!state.q) return true;
+  const toks = norm(state.q).split(/\s+/).filter(Boolean);
+  return toks.every(t => o._idx.includes(t));
+}
+function matches(o, skipFacet) {
+  if (state.notOnMap && o.cm) return false;
+  if (!matchesSearch(o)) return false;
+  if (state.ask && !state.ask.has(o.id)) return false;
+  for (const f of FACETS) {
+    if (f.key === skipFacet) continue;
+    const s = state.sel[f.key];
+    if (!s.size) continue;
+    const vals = orgVals(o, f);
+    if (!vals.some(v => s.has(v))) return false;
+  }
+  return true;
+}
+const anyFilter = () => state.notOnMap || !!state.q || !!state.ask || FACETS.some(f => state.sel[f.key].size);
+
+/* ---------- colour layers ---------- */
+const LAYERS = {
+  arc: {label: 'Problem area', of: o => arcOf[(o.p || [])[0]], cats: ARCS.map((a, i) => ({key: a.key, label: a.label, slot: i + 1}))},
+  quadrant: {label: 'Integral quadrant', of: o => (o.q || [])[0], cats: [{key: 'It', label: 'It: mechanisms & machines', slot: 1}, {key: 'I', label: 'I: minds & experience', slot: 2}, {key: 'We', label: 'We: meaning & culture', slot: 3}, {key: 'Its', label: 'Its: systems & structures', slot: 4}]},
+  transfer: {label: 'What flows where', of: o => ({into_model: 'into_model', into_builders: 'into_builders', into_institutions: 'into_institutions', protecting: 'own', convening: 'own', none_yet: 'none'})[o.tf], cats: [{key: 'into_model', label: 'Into the model', slot: 1}, {key: 'into_builders', label: 'Into the builders', slot: 2}, {key: 'own', label: 'Within its own community', slot: 3}, {key: 'into_institutions', label: 'Into institutions', slot: 4}, {key: 'none', label: 'Nothing yet', slot: 0}]},
+  framing: {label: 'What is at stake', of: o => o.fr, cats: [{key: 'catastrophic', label: 'Catastrophic or existential', slot: 1}, {key: 'present_harms', label: 'Present, concrete harms', slot: 2}, {key: 'flourishing', label: 'Flourishing, positive', slot: 3}, {key: 'structural', label: 'Structural, gradual', slot: 4}, {key: 'critical', label: 'Critical, deflationary', slot: 0}]},
+};
+function slotOf(o) {
+  const L = LAYERS[state.layer]; const k = L.of(o);
+  const c = L.cats.find(c => c.key === k);
+  return c ? c.slot : 0;
+}
+function shapeD(slot, x, y, r) {
+  switch (slot) {
+    case 2: { const d = r * 1.32; return `M${x} ${y - d}L${x + d} ${y}L${x} ${y + d}L${x - d} ${y}Z`; }
+    case 3: { const d = r * 0.9; return `M${x - d} ${y - d}h${2 * d}v${2 * d}h${-2 * d}Z`; }
+    case 4: { const d = r * 1.28; return `M${x} ${y - d}L${x + d} ${y + d * 0.72}L${x - d} ${y + d * 0.72}Z`; }
+    default: return `M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`;
+  }
+}
+const glyph = (slot, size = 12, cm = false) => `<svg width="${size}" height="${size}" viewBox="0 0 12 12" aria-hidden="true"><path class="s${slot}" d="${shapeD(slot, 6, 6, slot === 0 ? 3.2 : 4)}" ${cm ? 'stroke="currentColor" stroke-width="1.2"' : ''}/></svg>`;
+
+/* ---------- wheel geometry ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const CX = 500, CY = 500, R_IN = 64, R_OUT = 424, R_BAND = 450, R_LAB = 486, R_FAM = 532;
+const N = SECTORS.length, STEP = 2 * Math.PI / N;
+const START = -Math.PI / 2 - (SECTORS.indexOf('contemplative') + 0.5) * STEP;
+const a1Of = i => START + i * STEP;
+const P = (r, a) => [CX + r * Math.cos(a), CY + r * Math.sin(a)];
+const f1 = n => Math.round(n * 10) / 10;
+function annular(r1, r2, a1, a2) {
+  const [x1, y1] = P(r2, a1), [x2, y2] = P(r2, a2), [x3, y3] = P(r1, a2), [x4, y4] = P(r1, a1);
+  return `M${f1(x1)} ${f1(y1)}A${r2} ${r2} 0 0 1 ${f1(x2)} ${f1(y2)}L${f1(x3)} ${f1(y3)}A${r1} ${r1} 0 0 0 ${f1(x4)} ${f1(y4)}Z`;
+}
+const wheelOrgs = ORGS.filter(o => !o.gf && SECTORS.includes(home(o)));
+const funders = ORGS.filter(o => o.gf);
+const cellKey = (s, r) => s + '|' + r;
+const cells = new Map();
+SECTORS.forEach(s => RINGS.forEach(r => cells.set(cellKey(s, r), [])));
+wheelOrgs.forEach(o => { const k = cellKey(home(o), o.r); if (cells.has(k)) cells.get(k).push(o); });
+const ringEdges = (() => {
+  const mx = RINGS.map(r => Math.max(1, ...SECTORS.map(s => cells.get(cellKey(s, r)).length)));
+  const avg = mx.reduce((a, b) => a + b, 0) / mx.length;
+  const w = mx.map(m => 0.7 * m + 0.3 * avg);
+  const tot = w.reduce((a, b) => a + b, 0);
+  const span = R_OUT * R_OUT - R_IN * R_IN;
+  const e = [R_IN]; let acc = R_IN * R_IN;
+  w.forEach(x => { acc += span * x / tot; e.push(Math.sqrt(acc)); });
+  return e;
+})();
+function placeCell(n, r1, r2, a1, a2) {
+  if (!n) return {pts: [], s: 0};
+  const area = (a2 - a1) / 2 * (r2 * r2 - r1 * r1);
+  let s = Math.sqrt(area / n) * 1.02;
+  for (let it = 0; it < 60; it++) {
+    const pts = [];
+    const rows = Math.max(1, Math.floor((r2 - r1) / (s * 0.88)));
+    const dr = (r2 - r1) / rows;
+    for (let j = 0; j < rows; j++) {
+      const r = r1 + dr * (j + 0.5);
+      const pad = Math.min((s * 0.55) / r, (a2 - a1) / 2 - 0.0001);
+      const usable = (a2 - a1) - 2 * pad;
+      const k = Math.max(1, Math.floor(usable * r / s) + 1);
+      const off = (j % 2) ? 0.5 : 0;
+      for (let i = 0; i < k; i++) {
+        let t = k === 1 ? 0.5 : (i + (k > 2 ? off * 0.5 : 0)) / (k - 1);
+        t = Math.min(1, t);
+        pts.push({r, a: a1 + pad + usable * t});
+      }
+    }
+    if (pts.length >= n) {
+      const out = [];
+      for (let i = 0; i < n; i++) out.push(pts[Math.floor((i + 0.5) * pts.length / n)]);
+      out.sort((p, q) => (p.a - q.a) || (p.r - q.r));
+      return {pts: out, s};
+    }
+    s *= 0.94;
+  }
+  return {pts: [], s};
+}
+const pos = new Map();
+function layoutWheel() {
+  SECTORS.forEach((sec, i) => {
+    const a1 = a1Of(i), a2 = a1 + STEP;
+    RINGS.forEach((rg, j) => {
+      const list = cells.get(cellKey(sec, rg)).slice().sort((x, y) => (x.st || '').localeCompare(y.st || '') || x.n.localeCompare(y.n));
+      const {pts, s} = placeCell(list.length, ringEdges[j] + 3, ringEdges[j + 1] - 3, a1, a2);
+      const rad = Math.max(3.2, Math.min(5.8, s * 0.3));
+      list.forEach((o, k) => { const p = pts[k]; if (!p) return; const [x, y] = P(p.r, p.a); pos.set(o.id, {x, y, rad}); });
+    });
+  });
+  const fs = funders.slice().sort((a, b) => SECTORS.indexOf(a.tr[1] || a.tr[0]) - SECTORS.indexOf(b.tr[1] || b.tr[0]));
+  fs.forEach((o, i) => {
+    const ang = START + (i + 0.5) * (2 * Math.PI / Math.max(1, fs.length));
+    const [x, y] = P(R_BAND, ang); pos.set(o.id, {x, y, rad: 7, fund: true});
+  });
+}
+layoutWheel();
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+let gDots, gSpokes, gCells;
+function buildWheel() {
+  const svg = $('#wheel');
+  const defs = el('defs', {}, svg);
+  const pat = el('pattern', {id: 'hatch', width: 7, height: 7, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)', class: 'hatch'}, defs);
+  el('line', {x1: 0, y1: 0, x2: 0, y2: 7}, pat);
+  gCells = el('g', {}, svg);
+  SECTORS.forEach((sec, i) => {
+    const a1 = a1Of(i), a2 = a1 + STEP;
+    RINGS.forEach((rg, j) => {
+      const n = cells.get(cellKey(sec, rg)).length;
+      const c = el('path', {d: annular(ringEdges[j], ringEdges[j + 1], a1, a2), class: 'w-cell' + (n ? '' : ' empty'), 'data-cell': cellKey(sec, rg)}, gCells);
+      if (!n) {
+        const [x, y] = P((ringEdges[j] + ringEdges[j + 1]) / 2, a1 + STEP / 2);
+        const t = el('text', {x: f1(x), y: f1(y + 3), class: 'w-gap'}, svg); t.textContent = '0';
+      }
+    });
+  });
+  const gLines = el('g', {}, svg);
+  ringEdges.forEach((r, j) => el('circle', {cx: CX, cy: CY, r, class: 'w-ring' + (j === ringEdges.length - 1 ? ' outer' : '')}, gLines));
+  SECTORS.forEach((sec, i) => {
+    const a = a1Of(i);
+    const famStart = FAMILIES.some(f => f.sectors[0] === sec);
+    const [x1, y1] = P(R_IN, a), [x2, y2] = P(famStart ? R_BAND + 18 : R_OUT, a);
+    el('line', {x1: f1(x1), y1: f1(y1), x2: f1(x2), y2: f1(y2), class: 'w-spoke' + (famStart ? ' fam' : '')}, gLines);
+  });
+  el('circle', {cx: CX, cy: CY, r: R_BAND, class: 'w-band'}, gLines);
+  el('circle', {cx: CX, cy: CY, r: R_IN, class: 'w-center'}, svg);
+  const ct = el('text', {x: CX, y: CY + 2, class: 'w-center-t'}, svg); ct.textContent = 'AI safety';
+  const cs = el('text', {x: CX, y: CY + 20, class: 'w-center-s'}, svg); cs.textContent = 'THE CORE';
+  // sector labels
+  const gLab = el('g', {}, svg);
+  SECTORS.forEach((sec, i) => {
+    const a1 = a1Of(i) + 0.01, a2 = a1Of(i) + STEP - 0.01, mid = (a1 + a2) / 2;
+    const bottom = Math.sin(mid) > 0.05;
+    const r = bottom ? R_LAB + 11 : R_LAB;
+    const [x1, y1] = P(r, a1), [x2, y2] = P(r, a2);
+    const id = 'lp-' + sec;
+    el('path', {id, d: bottom ? `M${f1(x2)} ${f1(y2)}A${r} ${r} 0 0 0 ${f1(x1)} ${f1(y1)}` : `M${f1(x1)} ${f1(y1)}A${r} ${r} 0 0 1 ${f1(x2)} ${f1(y2)}`, fill: 'none'}, defs);
+    const t = el('text', {class: 'w-slabel', 'data-sector': sec, tabindex: 0, role: 'button', 'aria-label': lab('tradition', sec) + ': open sector'}, gLab);
+    const tp = el('textPath', {href: '#' + id, startOffset: '50%', 'text-anchor': 'middle'}, t);
+    tp.appendChild(document.createTextNode(chipL('tradition', sec) + ' '));
+    const n = el('tspan', {class: 'n', 'data-n': sec}, tp); n.textContent = '';
+  });
+  // family arcs
+  FAMILIES.forEach(f => {
+    const i0 = SECTORS.indexOf(f.sectors[0]), i1 = SECTORS.indexOf(f.sectors[f.sectors.length - 1]);
+    const a1 = a1Of(i0) + 0.03, a2 = a1Of(i1) + STEP - 0.03, mid = (a1 + a2) / 2;
+    const bottom = Math.sin(mid) > 0.05;
+    const r = bottom ? R_FAM + 9 : R_FAM;
+    const [x1, y1] = P(r, a1), [x2, y2] = P(r, a2);
+    const large = (a2 - a1) > Math.PI ? 1 : 0;
+    const id = 'fp-' + f.key;
+    el('path', {id, d: bottom ? `M${f1(x2)} ${f1(y2)}A${r} ${r} 0 ${large} 0 ${f1(x1)} ${f1(y1)}` : `M${f1(x1)} ${f1(y1)}A${r} ${r} 0 ${large} 1 ${f1(x2)} ${f1(y2)}`, fill: 'none'}, defs);
+    const ra = R_FAM - 16;
+    const [ax1, ay1] = P(ra, a1), [ax2, ay2] = P(ra, a2);
+    el('path', {d: `M${f1(ax1)} ${f1(ay1)}A${ra} ${ra} 0 ${large} 1 ${f1(ax2)} ${f1(ay2)}`, class: 'w-farc'}, svg);
+    const t = el('text', {class: 'w-flabel'}, svg);
+    const tp = el('textPath', {href: '#' + id, startOffset: '50%', 'text-anchor': 'middle'}, t);
+    tp.textContent = f.label;
+  });
+  gSpokes = el('g', {}, svg);
+  gDots = el('g', {}, svg);
+  wheelOrgs.concat(funders).forEach(o => {
+    const p = pos.get(o.id); if (!p) return;
+    const g = el('g', {'data-id': o.id}, gDots);
+    if (p.fund) {
+      const d = 8;
+      el('path', {d: `M${f1(p.x)} ${f1(p.y - d)}L${f1(p.x + d)} ${f1(p.y)}L${f1(p.x)} ${f1(p.y + d)}L${f1(p.x - d)} ${f1(p.y)}Z`, class: 'fund'}, g);
+    } else {
+      el('path', {class: 'dot', d: ''}, g);
+    }
+    el('circle', {cx: f1(p.x), cy: f1(p.y), r: p.fund ? 12 : f1(Math.min(Math.max(p.rad + 3, 7), p.rad / 0.3 * 0.52)), class: 'hitc'}, g);
+  });
+  svg.addEventListener('pointermove', onWheelMove);
+  svg.addEventListener('pointerleave', hideTip);
+  svg.addEventListener('click', onWheelClick);
+  svg.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset.sector) { e.preventDefault(); openSector(e.target.dataset.sector); } });
+}
+function paintDots() {
+  const anyF = anyFilter();
+  gDots.parentNode.classList.toggle('dim', anyF || state.layerOff.size > 0);
+  gDots.querySelectorAll('g[data-id]').forEach(g => {
+    const o = byId.get(g.dataset.id); const p = pos.get(o.id);
+    const hit = matches(o);
+    const slot = slotOf(o);
+    const layerHidden = state.layerOff.has(slot);
+    const shown = hit && !layerHidden;
+    if (p.fund) {
+      g.firstChild.classList.toggle('hit', shown && (anyF || state.layerOff.size > 0));
+      return;
+    }
+    const d = g.firstChild;
+    d.setAttribute('d', shapeD(slot, f1(p.x), f1(p.y), slot === 0 ? p.rad * 0.8 : p.rad));
+    d.setAttribute('class', 'dot s' + slot + (o.cm ? ' cm' : '') + (shown ? ' hit' : '') + (state.selected === o.id ? ' sel' : ''));
+  });
+  // sector counts
+  SECTORS.forEach(sec => {
+    const n = wheelOrgs.filter(o => home(o) === sec && matches(o)).length;
+    const t = document.querySelector(`[data-n="${sec}"]`);
+    if (t) t.textContent = n;
+  });
+  gCells.querySelectorAll('.w-cell').forEach(c => c.classList.toggle('sel', state.focus === c.dataset.cell || (state.focus && state.focus === c.dataset.cell.split('|')[0])));
+  document.querySelectorAll('.w-slabel').forEach(t => t.classList.toggle('on', state.focus === t.dataset.sector));
+}
+function drawSpokes(o) {
+  gSpokes.textContent = '';
+  if (!o) return;
+  const p = pos.get(o.id); if (!p) return;
+  const targets = p.fund ? o.tr : o.tr.slice(1);
+  targets.forEach(sec => {
+    const i = SECTORS.indexOf(sec); if (i < 0) return;
+    const m = a1Of(i) + STEP / 2;
+    const [tx, ty] = P(p.fund ? R_OUT : (ringEdges[2] + ringEdges[3]) / 2, m);
+    const [cx, cy] = P(p.fund ? R_OUT * 0.9 : 120, (Math.atan2(p.y - CY, p.x - CX) + m) / 2);
+    el('path', {d: `M${f1(p.x)} ${f1(p.y)}Q${f1(cx)} ${f1(cy)} ${f1(tx)} ${f1(ty)}`, class: 'spokeln'}, gSpokes);
+  });
+}
+
+/* tooltip */
+const tip = $('#tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html; tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y + 14;
+  if (left + w > window.innerWidth - 8) left = x - w - 14;
+  if (top + h > window.innerHeight - 8) top = y - h - 14;
+  tip.style.left = Math.max(8, left) + 'px'; tip.style.top = Math.max(8, top) + 'px';
+}
+function hideTip() { tip.hidden = true; if (!state.selected) drawSpokes(null); else drawSpokes(byId.get(state.selected)); }
+function onWheelMove(e) {
+  const g = e.target.closest('g[data-id]');
+  if (g) {
+    const o = byId.get(g.dataset.id);
+    drawSpokes(o);
+    showTip(`<span class="k">${esc(o.gf ? 'Generalist funder' : chipL('tradition', home(o)) + ' · ' + RING_LABEL[o.r])}</span><b>${esc(o.n)}</b>${esc(trunc(o.sum, 150))}`, e.clientX, e.clientY);
+    return;
+  }
+  const c = e.target.closest('[data-cell]');
+  if (c) {
+    const [s, r] = c.dataset.cell.split('|');
+    const list = cells.get(c.dataset.cell);
+    const n = list.filter(o => matches(o)).length;
+    showTip(`<span class="k">${esc(RING_LABEL[r])} ring</span><b>${esc(lab('tradition', s))}</b>${list.length ? `${n} of ${list.length} shown. Click to list them.` : 'Nothing found here. Click to read what this gap might mean.'}`, e.clientX, e.clientY);
+    return;
+  }
+  const t = e.target.closest('[data-sector]');
+  if (t) { showTip(`<b>${esc(lab('tradition', t.dataset.sector))}</b>${esc(trunc(def('tradition', t.dataset.sector).replace(/^Wheel \d+ \([^)]*\)\.\s*/, ''), 180))}`, e.clientX, e.clientY); return; }
+  hideTip();
+}
+function onWheelClick(e) {
+  const g = e.target.closest('g[data-id]');
+  if (g) { selectOrg(g.dataset.id); return; }
+  const t = e.target.closest('[data-sector]');
+  if (t) { openSector(t.dataset.sector); return; }
+  const c = e.target.closest('[data-cell]');
+  if (c) { openCell(c.dataset.cell); return; }
+}
+const trunc = (s, n) => { s = String(s || ''); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; };
+
+/* ---------- legend ---------- */
+function renderLegend() {
+  const L = LAYERS[state.layer];
+  const counts = {}; ORGS.forEach(o => { if (!matches(o)) return; const s = slotOf(o); counts[s] = (counts[s] || 0) + 1; });
+  const items = L.cats.map(c => `<button class="lgitem${state.layerOff.has(c.slot) ? ' off' : ''}" data-slot="${c.slot}" aria-pressed="${!state.layerOff.has(c.slot)}">${glyph(c.slot)}<span>${esc(c.label)}</span><span class="n">${counts[c.slot] || 0}</span></button>`).join('');
+  const rd = (() => {
+    const w = 240, h = 112, cx = w / 2, rs = [22, 44, 66, 88, 110];
+    const arc = r => `M ${cx - r} ${h} A ${r} ${r} 0 0 1 ${cx + r} ${h}`;
+    let s = `<svg class="ringdiag" viewBox="0 0 ${w} ${h + 2}" aria-hidden="true">`;
+    for (let i = 4; i >= 1; i--) s += `<path d="${arc(rs[i])}"/>`;
+    s += `<path class="disc" d="${arc(rs[0])} Z"/><text x="${cx}" y="${h - 6}">AI safety</text>`;
+    for (let i = 0; i < 4; i++) s += `<text x="${cx}" y="${h - (rs[i] + rs[i + 1]) / 2 + 3}">${RINGS[i]}</text>`;
+    return s + `</svg>`;
+  })();
+  $('#legend').innerHTML = `
+    <div class="lg"><label class="eyebrow" for="layerSel">Colour and shape by</label>
+      <select id="layerSel">${Object.entries(LAYERS).map(([k, l]) => `<option value="${k}"${k === state.layer ? ' selected' : ''}>${esc(l.label)}</option>`).join('')}</select>
+      <div>${items}</div><p>Click a key to hide or show it.</p></div>
+    <div class="lg"><span class="eyebrow">Rings, from the centre</span>${rd}<p>Core: AI-safety organisations. Bridge: rooted elsewhere, working on AI safety. Adjacent: AI's human effects, no x-risk frame. Potential: relevant know-how, little AI work yet.</p></div>
+    <div class="lg"><span class="eyebrow">Marks</span>
+      <div class="lgitem">${glyph(1, 14, true)}<span>Outlined: already on the aisafety.com map</span></div>
+      <div class="lgitem"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg><span>Generalist funder (outer band)</span></div>
+      <div class="lgitem"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14" fill="url(#hatch)" stroke="var(--line)"/></svg><span>Hatched cell: nothing found</span></div></div>`;
+  $('#layerSel').onchange = e => { state.layer = e.target.value; state.layerOff.clear(); refresh(); };
+  $('#legend').querySelectorAll('button.lgitem').forEach(b => b.onclick = () => { const s = +b.dataset.slot; state.layerOff.has(s) ? state.layerOff.delete(s) : state.layerOff.add(s); refresh(); });
+}
+
+/* ---------- filters UI ---------- */
+function facetCounts(f) {
+  const c = {}; ORGS.forEach(o => { if (!matches(o, f.key)) return; orgVals(o, f).forEach(v => c[v] = (c[v] || 0) + 1); });
+  return c;
+}
+function chipBtn(f, k, n) {
+  const on = state.sel[f.key].has(k);
+  return `<button class="fchip" data-f="${f.key}" data-k="${esc(k)}" aria-pressed="${on}" title="${esc(def(f.vocab, k))}" ${!n && !on ? 'disabled' : ''}>${esc(chipL(f.vocab, k))}<span class="n">${n || 0}</span></button>`;
+}
+const openGroups = new Set(FACETS.filter(f => f.open).map(f => f.key));
+let lensOpen = false;
+function renderFacets() {
+  let html = '';
+  let lensStarted = false;
+  FACETS.forEach(f => {
+    if (f.lens && !lensStarted) { lensStarted = true; html += `<details class="fgroup" id="lensGroup"${lensOpen ? ' open' : ''}><summary><span class="eyebrow">int/a lenses</span></summary><p class="lensnote">Ways of seeing the field drawn from int/a's own frames.</p>`; }
+    const c = facetCounts(f);
+    let body = '';
+    if (f.group === 'family') body = FAMILIES.map(fm => `<div class="fsub">${esc(fm.label)}</div><div class="chips">${fm.sectors.map(k => chipBtn(f, k, c[k])).join('')}</div>`).join('');
+    else if (f.group === 'arc') body = ARCS.map(a => `<div class="fsub">${esc(a.label)}</div><div class="chips">${a.problems.map(k => chipBtn(f, k, c[k])).join('')}</div>`).join('');
+    else body = `<div class="chips">${V[f.vocab].map(x => chipBtn(f, x.key, c[x.key])).join('')}</div>`;
+    const open = openGroups.has(f.key) || state.sel[f.key].size > 0;
+    const inner = `<details class="fgroup" data-g="${f.key}"${open ? ' open' : ''}><summary><span class="eyebrow">${esc(f.label)}${state.sel[f.key].size ? ' · ' + state.sel[f.key].size : ''}</span></summary>${f.note ? `<p class="lensnote">${esc(f.note)}</p>` : ''}${body}</details>`;
+    html += f.lens ? inner.replace('class="fgroup"', 'class="fgroup" style="border-top:0;padding-top:4px"') : inner;
+  });
+  if (lensStarted) html += '</details>';
+  $('#facets').innerHTML = html;
+  $('#facets').querySelectorAll('details[data-g]').forEach(d => d.addEventListener('toggle', () => { d.open ? openGroups.add(d.dataset.g) : openGroups.delete(d.dataset.g); }));
+  const lg = $('#lensGroup'); if (lg) lg.addEventListener('toggle', () => lensOpen = lg.open);
+  const total = ORGS.filter(o => matches(o)).length;
+  $('#fcount').textContent = `${total} of ${ORGS.length} shown`;
+  const nSel = FACETS.reduce((a, f) => a + state.sel[f.key].size, 0) + (state.notOnMap ? 1 : 0);
+  $('#filterBadge').textContent = nSel ? '· ' + nSel : '';
+  $('#notOnMap').checked = state.notOnMap;
+}
+$('#facets').addEventListener('click', e => {
+  const b = e.target.closest('.fchip'); if (!b) return;
+  const s = state.sel[b.dataset.f]; const k = b.dataset.k;
+  s.has(k) ? s.delete(k) : s.add(k);
+  state.persona = null; refresh();
+});
+$('#notOnMap').onchange = e => { state.notOnMap = e.target.checked; refresh(); };
+$('#clearAll').onclick = () => clearAll();
+function clearAll() { FACETS.forEach(f => state.sel[f.key].clear()); state.notOnMap = false; state.q = ''; $('#q').value = ''; state.ask = null; state.persona = null; state.layerOff.clear(); state.focus = null; refresh(); }
+
+function renderActive() {
+  const parts = [];
+  FACETS.forEach(f => state.sel[f.key].forEach(k => parts.push(`<span class="afchip">${esc(f.label)}: ${esc(chipL(f.vocab, k))}<button data-f="${f.key}" data-k="${esc(k)}" aria-label="Remove">×</button></span>`)));
+  if (state.notOnMap) parts.push(`<span class="afchip">Not on aisafety.com<button data-x="notOnMap" aria-label="Remove">×</button></span>`);
+  if (state.q) parts.push(`<span class="afchip">Search: “${esc(state.q)}”<button data-x="q" aria-label="Remove">×</button></span>`);
+  if (state.ask) parts.push(`<span class="afchip">Answer to your question (${state.ask.size})<button data-x="ask" aria-label="Remove">×</button></span>`);
+  const box = $('#activeFilters');
+  box.innerHTML = parts.length ? parts.join('') + `<span class="muted mono" style="font-size:12px">${ORGS.filter(o => matches(o)).length} shown</span>` : '';
+}
+$('#activeFilters').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.f) state.sel[b.dataset.f].delete(b.dataset.k);
+  if (b.dataset.x === 'notOnMap') state.notOnMap = false;
+  if (b.dataset.x === 'q') { state.q = ''; $('#q').value = ''; }
+  if (b.dataset.x === 'ask') state.ask = null;
+  refresh();
+});
+
+/* ---------- personas ---------- */
+const PERSONAS = DATA.personas;
+function renderPersonas() {
+  $('#personaBtns').innerHTML = PERSONAS.map(p => `<button class="persona" data-p="${p.key}" aria-pressed="${state.persona === p.key}">${esc(p.label)}</button>`).join('');
+}
+$('#personaBtns').addEventListener('click', e => { const b = e.target.closest('.persona'); if (b) applyPersona(b.dataset.p); });
+function applyPersona(key) {
+  if (state.persona === key) { clearAll(); return; }
+  const p = PERSONAS.find(x => x.key === key); if (!p) return;
+  FACETS.forEach(f => state.sel[f.key].clear()); state.notOnMap = !!p.notOnMap; state.q = ''; $('#q').value = ''; state.ask = null; state.layerOff.clear();
+  for (const k in (p.filters || {})) (p.filters[k] || []).forEach(v => state.sel[k].add(v));
+  state.layer = p.layer || 'arc';
+  state.persona = key;
+  if (p.view) setView(p.view, true);
+  if (p.opKind) state.opKind = p.opKind;
+  refresh();
+}
+function renderLens() {
+  const box = $('#lens');
+  const p = PERSONAS.find(x => x.key === state.persona);
+  if (!p) { box.hidden = true; return; }
+  box.hidden = false;
+  box.innerHTML = `<div><div class="eyebrow">${esc(p.label)}</div><h2>${esc(p.question)}</h2><p>${esc(p.how)}</p></div><button class="btn ghost" id="lensClose">Reset</button>`;
+  $('#lensClose').onclick = clearAll;
+}
+
+/* ---------- views ---------- */
+function setView(v, silent) {
+  state.view = v;
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.view === v));
+  ['wheel', 'matrix', 'directory', 'openings', 'guide'].forEach(k => $('#view-' + k).hidden = k !== v);
+  if (!silent) refresh();
+}
+document.querySelector('.tabs').addEventListener('click', e => { const b = e.target.closest('button[data-view]'); if (b) setView(b.dataset.view); });
+
+/* matrix */
+function renderMatrix() {
+  const box = $('#view-matrix');
+  const vis = ORGS.filter(o => !o.gf && matches(o));
+  const cnt = {}; let maxc = 1;
+  vis.forEach(o => { const ps = state.mxMode === 'any' ? (o.p || []) : (o.p || []).slice(0, 1); ps.forEach(p => { const k = home(o) + '|' + p; cnt[k] = (cnt[k] || 0) + 1; maxc = Math.max(maxc, cnt[k]); }); });
+  const probs = ARCS.flatMap(a => a.problems);
+  const arcStart = new Set(ARCS.map(a => a.problems[0]));
+  let h = `<div class="mx-controls"><span>Rows: what an organisation brings. Columns: what it works on.</span><span class="seg" role="group" aria-label="Count"><button data-mx="any" aria-pressed="${state.mxMode === 'any'}">All problems it works on</button><button data-mx="primary" aria-pressed="${state.mxMode === 'primary'}">Main problem only</button></span><span class="muted">Small dots mark empty cells. Generalist funders are left out.</span></div>`;
+  h += `<div class="mx-wrap"><table class="mx"><thead><tr><th></th>${probs.map(p => `<th class="${arcStart.has(p) ? 'sep' : ''}" scope="col"><div title="${esc(lab('problem', p))}">${esc(chipL('problem', p))}</div></th>`).join('')}<th><div class="muted">total</div></th></tr></thead><tbody>`;
+  FAMILIES.forEach(fm => {
+    h += `<tr class="fam"><th colspan="${probs.length + 2}">${esc(fm.label)}</th></tr>`;
+    fm.sectors.forEach(s => {
+      const tot = vis.filter(o => home(o) === s).length;
+      h += `<tr><th scope="row">${esc(chipL('tradition', s))}</th>`;
+      probs.forEach(p => {
+        const n = cnt[s + '|' + p] || 0;
+        const size = n ? Math.max(9, Math.round(28 * Math.sqrt(n / maxc))) : 0;
+        h += `<td class="${arcStart.has(p) ? 'sep' : ''}"><button data-mxc="${s}|${p}" aria-label="${esc(lab('tradition', s))} × ${esc(lab('problem', p))}: ${n}">${n ? `<span class="blob" style="width:${size}px;height:${size}px"></span>${size >= 16 ? `<span class="cnt">${n}</span>` : ''}` : '<span class="zero"></span>'}</button></td>`;
+      });
+      h += `<td class="tot">${tot}</td></tr>`;
+    });
+  });
+  h += `</tbody><tfoot><tr><th></th>${probs.map(p => `<td>${vis.filter(o => (state.mxMode === 'any' ? (o.p || []) : (o.p || []).slice(0, 1)).includes(p)).length}</td>`).join('')}<td></td></tr></tfoot></table></div>`;
+  box.innerHTML = h;
+  box.querySelectorAll('[data-mx]').forEach(b => b.onclick = () => { state.mxMode = b.dataset.mx; renderMatrix(); });
+  box.querySelectorAll('[data-mxc]').forEach(b => {
+    b.onclick = () => openMatrixCell(b.dataset.mxc);
+    b.onpointermove = e => { const [s, p] = b.dataset.mxc.split('|'); const n = cnt[b.dataset.mxc] || 0; showTip(`<span class="k">${esc(chipL('tradition', s))} × ${esc(chipL('problem', p))}</span><b>${n} organisation${n === 1 ? '' : 's'}</b>${n ? 'Click to list them.' : 'Nobody found here.'}`, e.clientX, e.clientY); };
+    b.onpointerleave = () => tip.hidden = true;
+  });
+}
+
+/* directory */
+function renderDirectory() {
+  const box = $('#view-directory');
+  const vis = ORGS.filter(o => matches(o));
+  const sorters = {
+    sector: (a, b) => (SECTORS.indexOf(home(a)) - SECTORS.indexOf(home(b))) || (RINGS.indexOf(a.r) - RINGS.indexOf(b.r)) || a.n.localeCompare(b.n),
+    name: (a, b) => a.n.localeCompare(b.n),
+    ring: (a, b) => (RINGS.indexOf(a.r) - RINGS.indexOf(b.r)) || a.n.localeCompare(b.n),
+    founded: (a, b) => (parseInt(b.f) || 0) - (parseInt(a.f) || 0) || a.n.localeCompare(b.n),
+    region: (a, b) => lab('region', a.rg).localeCompare(lab('region', b.rg)) || a.n.localeCompare(b.n),
+  };
+  if (state.q) vis.sort((a, b) => (b._name.includes(norm(state.q)) - a._name.includes(norm(state.q))) || sorters[state.dirSort](a, b));
+  else vis.sort(sorters[state.dirSort]);
+  box.innerHTML = `<div class="dir-controls"><label>Sort by <select id="dirSort">${[['sector', 'Tradition, then ring'], ['name', 'Name'], ['ring', 'Ring'], ['founded', 'Newest first'], ['region', 'Region']].map(([k, l]) => `<option value="${k}"${k === state.dirSort ? ' selected' : ''}>${l}</option>`).join('')}</select></label><span class="mono">${vis.length} organisations</span></div>
+  <div class="dir">${vis.map(o => cardHtml(o)).join('') || '<div class="empty-state">Nothing matches. Try removing a filter.</div>'}</div>`;
+  $('#dirSort').onchange = e => { state.dirSort = e.target.value; renderDirectory(); };
+}
+function cardHtml(o) {
+  return `<button class="card${state.selected === o.id ? ' sel' : ''}" data-open="${o.id}"><span class="nm">${glyph(slotOf(o), 12, o.cm)}<span>${esc(o.n)}</span></span><span class="meta">${esc(o.gf ? 'Generalist funder' : chipL('tradition', home(o)))} · ${esc(RING_LABEL[o.r])}${o.hq ? ' · ' + esc(o.hq) : ''}${o.f ? ' · ' + esc(o.f) : ''}</span><p>${esc(o.sum)}</p><span class="tagrow">${(o.p || []).slice(0, 3).map(p => `<span class="tag">${esc(chipL('problem', p))}</span>`).join('')}${o.cm ? '<span class="tag cm">On aisafety.com</span>' : ''}${o.ss === 'new' ? '<span class="tag">New</span>' : ''}${o.ss === 'dormant' ? '<span class="tag warn">Dormant</span>' : ''}</span></button>`;
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) selectOrg(b.dataset.open); });
+
+/* openings */
+function renderOpenings() {
+  const box = $('#view-openings');
+  const gaps = DATA.gaps || [];
+  if (!gaps.length) { box.innerHTML = '<div class="empty-state">Openings are being written.</div>'; return; }
+  const kinds = [['all', 'All'], ['founder', 'For founders'], ['funder', 'For funders'], ['inta', 'For int/a']];
+  const vis = gaps.filter(g => state.opKind === 'all' || (g.who || []).includes(state.opKind)).filter(g => {
+    if (!anyFilter()) return true;
+    const trs = state.sel.tr, ps = state.sel.p;
+    if (trs.size && !(g.sectors || []).some(s => trs.has(s))) return false;
+    if (ps.size && !(g.problems || []).some(s => ps.has(s))) return false;
+    if (state.q && !norm(g.title + ' ' + g.summary + ' ' + (g.detail || '')).includes(norm(state.q))) return false;
+    return true;
+  });
+  box.innerHTML = `<div class="op-controls"><span class="seg" role="group" aria-label="Who it is for">${kinds.map(([k, l]) => `<button data-op="${k}" aria-pressed="${state.opKind === k}">${l}</button>`).join('')}</span><span class="muted" style="font-size:13px">${vis.length} of ${gaps.length}. Tradition, problem and search filters apply.</span></div>
+  <div class="ops">${vis.map(g => `<article class="op${g.top ? ' top' : ''}" id="op-${esc(g.id)}"><div class="who">${g.rank ? `<span class="rk">${g.rank}</span>` : ''}${g.top ? '<span class="st">Start here</span>' : ''}${(g.who || []).map(w => `<span>${esc({founder: 'Founders', funder: 'Funders', inta: 'int/a'}[w] || w)}</span>`).join('')}${g.confidence ? `<span>${esc(g.confidence)} confidence</span>` : ''}</div><h3>${esc(g.title)}</h3><p>${esc(g.summary)}</p>${g.detail ? `<details><summary>Why it's open, and first steps</summary><p>${esc(g.detail)}</p>${(g.steps || []).length ? `<ul>${g.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}${g.evidence ? `<p class="muted" style="margin-top:6px">${esc(g.evidence)}</p>` : ''}</details>` : ''}<div class="linkchips">${(g.sectors || []).map(s => `<button class="lc" data-sector-open="${s}">${esc(chipL('tradition', s))}</button>`).join('')}${(g.related || []).filter(id => byId.has(id)).slice(0, 8).map(id => `<button class="lc" data-open="${id}">${esc(byId.get(id).s || byId.get(id).n)}</button>`).join('')}</div></article>`).join('') || '<div class="empty-state">No openings match these filters.</div>'}</div>`;
+  box.querySelectorAll('[data-op]').forEach(b => b.onclick = () => { state.opKind = b.dataset.op; renderOpenings(); });
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-sector-open]'); if (b) openSector(b.dataset.sectorOpen); });
+
+/* guide */
+function renderGuide() {
+  const box = $('#view-guide');
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const G = DATA.guide;
+  const gl = (vocab, title) => `<div><h3>${esc(title)}</h3><div class="gloss">${V[vocab].map(c => `<div><b>${esc(c.label)}.</b> ${esc(c.definition.replace(/^Wheel \d+ \([^)]*\)\.\s*/, '').replace(/^\[[^\]]*\]\s*/, ''))}</div>`).join('')}</div></div>`;
+  box.innerHTML = `<div class="guide">
+    <div><h2>${esc(G.title)}</h2>${G.intro.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+    <div><h3>Start from where you stand</h3><div class="pgrid">${PERSONAS.map(p => `<button class="pcard" data-pp="${p.key}"><b>${esc(p.label)}</b><span>${esc(p.question)}</span></button>`).join('')}</div></div>
+    <div><h3>How to read the wheel</h3>${G.read.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+    ${gl('ring', 'The four rings')}
+    ${gl('tradition', 'The fourteen traditions')}
+    ${gl('problem', 'The fourteen problems')}
+    ${gl('transfer', 'What flows where')}
+    ${gl('quadrant', 'Integral quadrants')}
+    <div><h3>How this was made</h3>${G.method.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+    <div><h3>Limits</h3>${G.limits.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+  </div>`;
+  box.querySelectorAll('[data-pp]').forEach(b => b.onclick = () => applyPersona(b.dataset.pp));
+}
+
+/* ---------- panel ---------- */
+const panel = $('#panel'), pin = $('#panelInner');
+function openPanel(html) { pin.innerHTML = html; panel.classList.add('open'); panel.scrollTop = 0; }
+$('#panelClose').onclick = () => { panel.classList.remove('open'); };
+function tagList(f, arr) { return (arr || []).map(k => `<span class="tag" title="${esc(def(f, k))}">${esc(chipL(f, k))}</span>`).join(''); }
+function miniList(list) {
+  return `<div class="minilist">${list.map(o => `<button data-open="${o.id}">${glyph(slotOf(o), 10, o.cm)}<em style="font-style:normal">${esc(o.n)}</em><span>${esc(o.gf ? 'funder' : RING_LABEL[o.r])}</span></button>`).join('')}</div>`;
+}
+function selectOrg(id, noHash) {
+  const o = byId.get(id); if (!o) return;
+  state.selected = id;
+  if (!noHash) { try { history.replaceState(null, '', '#' + id); } catch (e) {} }
+  const neighbours = o.gf ? [] : cells.get(cellKey(home(o), o.r)).filter(x => x.id !== o.id);
+  const pp = (o.p || [])[0];
+  const parallel = pp ? ORGS.filter(x => x.id !== o.id && !x.gf && (x.p || [])[0] === pp && home(x) !== home(o)).sort((a, b) => RINGS.indexOf(b.r) - RINGS.indexOf(a.r)).slice(0, 8) : [];
+  const kw = (o.kw || []).map(k => `<li>${k[2] ? `<a href="${esc(k[2])}" target="_blank" rel="noopener">${esc(k[0])}</a>` : esc(k[0])}${k[1] ? ` <span class="muted mono">${esc(k[1])}</span>` : ''}</li>`).join('');
+  openPanel(`
+    <div class="p-eyebrow"><span class="tag ring">${esc(RING_LABEL[o.r])} ring</span>${o.gf ? '<span class="tag">Generalist funder</span>' : `<span class="tag">${esc(lab('tradition', home(o)))}</span>`}${o.cm ? '<span class="tag cm">On aisafety.com map</span>' : '<span class="tag">Not on aisafety.com map</span>'}${o.ss && o.ss !== 'active' ? `<span class="tag${o.ss === 'dormant' || o.ss === 'unverified' ? ' warn' : ''}">${esc(chipL('status', o.ss))}</span>` : ''}</div>
+    <h2 class="p-title">${esc(o.n)}</h2>
+    <p class="p-sub">${[o.ot ? chipL('org_type', o.ot) : '', o.hq, o.f ? 'founded ' + o.f : '', o.sc && o.sc !== 'unknown' ? o.sc : ''].filter(Boolean).map(esc).join(' · ')}</p>
+    <div class="p-actions">${o.u ? `<a class="btn primary" href="${esc(o.u)}" target="_blank" rel="noopener">Visit site ↗</a>` : ''}<button class="btn" id="copyAnchor">Copy link anchor</button></div>
+    ${o.cv ? `<p class="caveat"><b>Note.</b> ${esc(o.cv)}</p>` : ''}
+    <p class="p-lede">${esc(o.sum)}</p>
+    ${o.why ? `<p class="p-why">${esc(o.why)}</p>` : ''}
+    ${kw ? `<div class="p-sec"><h3>Key work</h3><ul>${kw}</ul></div>` : ''}
+    <div class="p-sec"><h3>Where it sits</h3><dl class="kv">
+      <dt>Traditions</dt><dd>${o.tr.map((t, i) => esc(lab('tradition', t)) + (i === 0 && !o.gf ? ' (home)' : '')).join(', ')}${o.st ? `<br><span class="muted">${esc(lab('sub_tradition', o.st))}</span>` : ''}</dd>
+      <dt>Works on</dt><dd><span class="tagrow">${tagList('problem', o.p)}</span></dd>
+      <dt>Does</dt><dd><span class="tagrow">${tagList('role', o.ro)}</span></dd>
+      <dt>Flows</dt><dd>${esc(lab('transfer', o.tf))}</dd>
+      <dt>Stakes</dt><dd>${esc(lab('framing', o.fr))}</dd>
+      <dt>Quadrant</dt><dd>${(o.q || []).map(q => esc(lab('quadrant', q))).join(', ')}</dd>
+      <dt>Knowing</dt><dd>${esc(lab('way_of_knowing', o.wk))}</dd>
+      ${(o.b || []).length ? `<dt>int/a</dt><dd><span class="tagrow">${tagList('badges', o.b)}</span></dd>` : ''}
+    </dl></div>
+    ${(o.pp || []).length ? `<div class="p-sec"><h3>People</h3><p>${o.pp.map(esc).join('; ')}</p></div>` : ''}
+    ${o.fu ? `<div class="p-sec"><h3>Funding</h3><p>${esc(o.fu)}</p></div>` : ''}
+    ${(o.en || []).length || (o.eg || []).length ? `<div class="p-sec"><h3>How to get involved</h3>${(o.eg || []).length ? `<p class="tagrow" style="margin-bottom:6px">${tagList('engagement', o.eg)}</p>` : ''}${(o.en || []).length ? `<ul>${o.en.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}${(o.hb || []).length ? `<p class="muted" style="margin-top:6px">Near int/a: ${o.hb.map(h => esc(chipL('inta_hub', h))).join(', ')}</p>` : ''}</div>` : ''}
+    ${neighbours.length ? `<div class="p-sec"><h3>Same cell: ${esc(chipL('tradition', home(o)))} · ${esc(RING_LABEL[o.r])}</h3>${miniList(neighbours.slice(0, 12))}</div>` : ''}
+    ${parallel.length ? `<div class="p-sec"><h3>Same problem, other traditions: ${esc(chipL('problem', pp))}</h3>${miniList(parallel)}</div>` : ''}
+    <div class="p-sec"><h3>Evidence</h3><p>${o.se ? esc(o.se) + '. ' : ''}${o.cf ? 'Confidence: ' + esc(o.cf) + '.' : ''}</p>${(o.src || []).length ? `<ul>${o.src.slice(0, 6).map(u => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\/(www\.)?/, '').slice(0, 60))}</a></li>`).join('')}</ul>` : ''}</div>
+  `);
+  $('#copyAnchor').onclick = e => copyText('#' + o.id, e.currentTarget, 'Anchor copied: add it to the end of this map’s link');
+  drawSpokes(o);
+  refresh(true);
+}
+function copyText(text, btn, okMsg) {
+  const done = () => { const t = btn.textContent; btn.textContent = 'Copied'; btn.title = okMsg || ''; setTimeout(() => btn.textContent = t, 1600); };
+  try { navigator.clipboard.writeText(text).then(done, () => fallback()); } catch (e) { fallback(); }
+  function fallback() { const r = document.createRange(); const span = document.createElement('code'); span.textContent = text; btn.after(span); r.selectNodeContents(span); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+}
+function openSector(sec) {
+  state.focus = sec;
+  const list = wheelOrgs.filter(o => home(o) === sec);
+  const vis = list.filter(o => matches(o));
+  const byRing = RINGS.map(r => list.filter(o => o.r === r).length);
+  const mx = Math.max(1, ...byRing);
+  const subs = {}; list.forEach(o => { if (o.st) subs[o.st] = (subs[o.st] || 0) + 1; });
+  const note = (DATA.sectorNotes || {})[sec] || {};
+  const ops = (DATA.gaps || []).filter(g => (g.sectors || []).includes(sec));
+  const sec2 = ORGS.filter(o => o.tr.slice(1).includes(sec) && home(o) !== sec);
+  openPanel(`
+    <div class="p-eyebrow"><span class="eyebrow">${esc((FAMILIES.find(f => f.key === famOf[sec]) || {}).label || '')}</span></div>
+    <h2 class="p-title">${esc(lab('tradition', sec))}</h2>
+    <p class="p-sub">${list.length} organisations · ${list.filter(o => o.cm).length} on aisafety.com · ${vis.length} shown with current filters</p>
+    <div class="p-actions"><button class="btn primary" id="secFilter">Filter the map to this tradition</button></div>
+    ${note.overview ? `<p class="p-lede">${esc(note.overview)}</p>` : `<p class="p-lede">${esc(def('tradition', sec).replace(/^Wheel \d+ \([^)]*\)\.\s*/, ''))}</p>`}
+    ${note.missing ? `<p class="p-why">${esc(note.missing)}</p>` : ''}
+    <div class="p-sec"><h3>By ring</h3><div class="bars">${RINGS.map((r, i) => `<div class="bar"><span>${RING_LABEL[r]}</span><i style="width:${Math.round(100 * byRing[i] / mx)}%"></i><span>${byRing[i]}</span></div>`).join('')}</div></div>
+    ${Object.keys(subs).length ? `<div class="p-sec"><h3>Schools within it</h3><div class="bars">${Object.entries(subs).sort((a, b) => b[1] - a[1]).map(([k, n]) => `<div class="bar" style="grid-template-columns:130px 1fr 30px"><span title="${esc(lab('sub_tradition', k))}">${esc(chipL('sub_tradition', k))}</span><i style="width:${Math.round(100 * n / list.length)}%"></i><span>${n}</span></div>`).join('')}</div></div>` : ''}
+    ${ops.length ? `<div class="p-sec"><h3>Openings here</h3><div class="minilist">${ops.map(g => `<button data-goop="${esc(g.id)}">${esc(g.title)}</button>`).join('')}</div></div>` : ''}
+    ${RINGS.map(r => { const l = list.filter(o => o.r === r); return l.length ? `<div class="p-sec"><h3>${RING_LABEL[r]} ring</h3>${miniList(l.sort((a, b) => a.n.localeCompare(b.n)))}</div>` : ''; }).join('')}
+    ${sec2.length ? `<div class="p-sec"><h3>Also draws on ${esc(chipL('tradition', sec))}</h3>${miniList(sec2.slice(0, 20))}</div>` : ''}
+  `);
+  $('#secFilter').onclick = () => { state.sel.tr.clear(); state.sel.tr.add(sec); refresh(); };
+  pin.querySelectorAll('[data-goop]').forEach(b => b.onclick = () => { setView('openings'); setTimeout(() => { const t = document.getElementById('op-' + b.dataset.goop); if (t) t.scrollIntoView({block: 'center'}); }, 30); });
+  refresh(true);
+}
+function openCell(key) {
+  const [sec, r] = key.split('|');
+  state.focus = key;
+  const list = cells.get(key);
+  const note = ((DATA.cellNotes || {})[key]) || '';
+  openPanel(`
+    <div class="p-eyebrow"><span class="tag ring">${esc(RING_LABEL[r])} ring</span><span class="tag">${esc(lab('tradition', sec))}</span></div>
+    <h2 class="p-title">${esc(chipL('tradition', sec))} · ${esc(RING_LABEL[r].toLowerCase())}</h2>
+    <p class="p-sub">${list.length} organisation${list.length === 1 ? '' : 's'}</p>
+    ${list.length ? '' : `<p class="p-lede">The sweep found no organisation here. ${esc(def('ring', r))}</p>`}
+    ${note ? `<p class="p-why">${esc(note)}</p>` : (list.length ? '' : `<p class="p-why">An empty cell is either an opening or a gap in the search. Read the tradition's notes before treating it as a niche.</p>`)}
+    ${list.length ? miniList(list.slice().sort((a, b) => a.n.localeCompare(b.n))) : ''}
+    <div class="p-actions" style="margin-top:14px"><button class="btn" data-sector-open="${sec}">Open ${esc(chipL('tradition', sec))}</button></div>
+  `);
+  refresh(true);
+}
+function openMatrixCell(key) {
+  const [s, p] = key.split('|');
+  const list = ORGS.filter(o => !o.gf && home(o) === s && (state.mxMode === 'any' ? (o.p || []) : (o.p || []).slice(0, 1)).includes(p) && matches(o));
+  openPanel(`
+    <div class="p-eyebrow"><span class="tag">${esc(lab('tradition', s))}</span><span class="tag">${esc(lab('problem', p))}</span></div>
+    <h2 class="p-title">${esc(chipL('tradition', s))} × ${esc(chipL('problem', p))}</h2>
+    <p class="p-sub">${list.length} organisation${list.length === 1 ? '' : 's'} with current filters</p>
+    <p class="p-lede">${esc(def('problem', p).replace(/^\[[^\]]*\]\s*/, ''))}</p>
+    ${list.length ? miniList(list) : '<p class="p-why">Nobody from this tradition was found working on this problem. That may be an opening, or a limit of the search.</p>'}
+  `);
+}
+function defaultPanel() {
+  const S = DATA.stats || [];
+  const G = DATA.guide;
+  pin.innerHTML = `
+    <div class="eyebrow" style="margin-bottom:8px">About this map</div>
+    <h2 class="p-title" style="font-size:1.6rem">${esc(G.panelTitle)}</h2>
+    <p class="p-lede">${esc(G.panelIntro)}</p>
+    <div class="p-sec"><h3>What stands out</h3>${S.map(s => `<div class="stat"><b>${esc(s.value)}</b><span>${esc(s.text)}</span></div>`).join('')}</div>
+    <div class="p-sec"><h3>Try</h3><ul><li>Click a dot to read about an organisation.</li><li>Click a tradition's name to see its whole sector.</li><li>Hatched cells are places the sweep found nothing.</li><li>Switch the colour to <i>What flows where</i> to see which traditions reach the models themselves.</li></ul></div>
+    <div class="p-sec"><h3>Compiled</h3><p>${esc(G.compiled)}</p>${DATA.reportUrl ? `<p style="margin-top:8px"><a href="${esc(DATA.reportUrl)}" target="_blank" rel="noopener">Read the full report: findings, openings, method and limits ↗</a></p>` : ''}</div>`;
+}
+
+/* ---------- ask the map ---------- */
+let sample = null;
+const ASK_EX = DATA.askExamples || [];
+function openAsk() {
+  openPanel(`
+    <div class="eyebrow" style="margin-bottom:8px">Ask the map</div>
+    <h2 class="p-title" style="font-size:1.6rem">Ask a question in your own words</h2>
+    <p class="p-lede">Claude reads the map's index and picks the organisations that answer it. Each question uses your own Claude account.</p>
+    <form class="ask-box" id="askForm"><label class="sr" for="askQ">Your question</label><textarea id="askQ" placeholder="e.g. Who in Europe works on care-based alignment?"></textarea><div style="display:flex;gap:8px"><button class="btn primary" type="submit" id="askGo">Ask</button><button class="btn" type="button" id="askStop" hidden>Stop</button></div></form>
+    <div class="p-sec ask-ex"><h3>Examples</h3>${ASK_EX.map(q => `<button data-askex="${esc(q)}">${esc(q)}</button>`).join('')}</div>
+    <div id="askOut"></div>`);
+  pin.querySelectorAll('[data-askex]').forEach(b => b.onclick = () => { $('#askQ').value = b.dataset.askex; runAsk(); });
+  $('#askForm').onsubmit = e => { e.preventDefault(); runAsk(); };
+  $('#askQ').focus();
+}
+let askCtl = null;
+function askIndex() {
+  return ORGS.map(o => [o.id, o.s || o.n, o.gf ? 'funder' : chipL('tradition', home(o)), o.r, (o.p || []).map(p => chipL('problem', p)).join('/'), chipL('region', o.rg), (o.hb || []).join('/'), trunc(o.sum, 120)].join(' | ')).join('\n');
+}
+async function runAsk() {
+  const q = $('#askQ').value.trim(); if (!q || !sample) return;
+  const out = $('#askOut'); out.innerHTML = '<p class="muted">Thinking…</p>';
+  $('#askGo').disabled = true; $('#askStop').hidden = false;
+  askCtl = new AbortController();
+  $('#askStop').onclick = () => askCtl.abort();
+  const prompt = `You help people navigate "The Wider Field", a map of ${ORGS.length} organisations that bring knowledge from outside mainstream AI safety to making advanced AI go well. It was compiled for the integral altruism (int/a) community in October 2026.\n\nAnswer the question using ONLY organisations in the index. Choose up to 12 that answer it best. If nothing fits well, say so.\n\nReply with only JSON of this shape:\n{"answer": "2-4 plain sentences in British English that answer the question and name the most relevant organisations", "picks": [{"id": "an id from the index", "why": "one short sentence"}]}\n\nIndex columns: id | name | home tradition | ring (core, bridge, adjacent, potential = distance from the AI-safety core) | problems | region | int/a hubs | summary\n${askIndex()}\n\nQUESTION: ${q}`;
+  try {
+    const res = await sample.json(prompt, {signal: askCtl.signal});
+    const picks = (res && Array.isArray(res.picks) ? res.picks : []).filter(p => p && byId.has(String(p.id)));
+    state.ask = picks.length ? new Set(picks.map(p => String(p.id))) : null;
+    out.innerHTML = `<div class="p-sec"><h3>Answer</h3><p class="ask-ans">${esc(res && res.answer || '')}</p></div>${picks.length ? `<div class="p-sec"><h3>Organisations (${picks.length}), highlighted on the map</h3><div class="minilist">${picks.map(p => { const o = byId.get(String(p.id)); return `<button data-open="${o.id}">${glyph(slotOf(o), 10, o.cm)}<em style="font-style:normal">${esc(o.n)}<br><span class="muted" style="font-size:12px;margin:0;font-family:var(--sans);white-space:normal">${esc(p.why || '')}</span></em></button>`; }).join('')}</div></div><p><button class="btn" id="askClear">Clear highlight</button></p>` : ''}`;
+    const c = $('#askClear'); if (c) c.onclick = () => { state.ask = null; refresh(true); };
+    refresh(true);
+  } catch (e) {
+    const code = e && e.code;
+    const msg = {not_granted: 'Asking is turned off for this view.', sampling_disabled: 'Claude isn’t available on this account.', rate_limited: 'Too many questions at once. Try again in a minute.', invalid_json: 'The answer came back garbled. Try asking again.', cancelled: 'Stopped.', refused: 'Claude declined this question. Try rephrasing it.', session_expired: 'Sign in again to ask.'}[code] || 'Something went wrong. Try again.';
+    out.innerHTML = `<p class="muted">${esc(msg)}</p>`;
+    if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].includes(code)) $('#askBtn').hidden = true;
+  } finally {
+    const g = $('#askGo'); if (g) g.disabled = false; const s = $('#askStop'); if (s) s.hidden = true;
+  }
+}
+$('#askBtn').onclick = openAsk;
+try {
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('sample').then(s => { if (s) { sample = s; $('#askBtn').hidden = false; } }).catch(() => {});
+  }
+} catch (e) {}
+
+/* ---------- suggest ---------- */
+function openSuggest() {
+  const tpl = `Suggestion for The Wider Field (int/a AI-safety map)\n\nType: addition / correction\nOrganisation:\nWebsite:\nWhat it does (one or two sentences):\nWhy it belongs, or what should change:\nYour name (optional):`;
+  openPanel(`<div class="eyebrow" style="margin-bottom:8px">Improve the map</div><h2 class="p-title" style="font-size:1.6rem">Suggest an addition or correction</h2><p class="p-lede">Fill this in, copy it, and post it in the int/a Europe chat or send it to whoever shared the map with you.</p><div class="suggest"><label class="sr" for="sugT">Suggestion</label><textarea id="sugT">${esc(tpl)}</textarea></div><p class="p-actions" style="margin-top:10px"><button class="btn primary" id="sugCopy">Copy text</button></p>`);
+  $('#sugCopy').onclick = e => copyText($('#sugT').value, e.currentTarget);
+}
+
+/* ---------- footer ---------- */
+$('#foot').innerHTML = `<span>${esc(DATA.guide.compiled)}</span>${DATA.reportUrl ? `<a href="${esc(DATA.reportUrl)}" target="_blank" rel="noopener">Read the full report ↗</a>` : ''}<button id="sugBtn">Suggest an addition or correction</button>`;
+$('#sugBtn').onclick = openSuggest;
+
+/* ---------- search wiring ---------- */
+let qT;
+$('#q').addEventListener('input', e => { clearTimeout(qT); qT = setTimeout(() => { state.q = e.target.value.trim(); state.persona = null; refresh(); }, 120); });
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); $('#q').focus(); }
+  if (e.key === 'Escape') { if ($('#filters').classList.contains('open')) toggleFilters(false); else if (panel.classList.contains('open')) panel.classList.remove('open'); }
+});
+function toggleFilters(on) { $('#filters').classList.toggle('open', on); $('#filterToggle').setAttribute('aria-expanded', on); }
+$('#filterToggle').onclick = () => toggleFilters(!$('#filters').classList.contains('open'));
+$('#filterClose').onclick = () => toggleFilters(false);
+
+/* ---------- refresh ---------- */
+function refresh(panelOnly) {
+  paintDots();
+  renderLegend();
+  renderFacets();
+  renderActive();
+  renderPersonas();
+  renderLens();
+  if (state.view === 'matrix') renderMatrix();
+  if (state.view === 'directory') renderDirectory();
+  if (state.view === 'openings') renderOpenings();
+  if (state.view === 'guide') renderGuide();
+}
+
+const topEl = document.querySelector('.top');
+const setTop = () => document.documentElement.style.setProperty('--top-h', topEl.offsetHeight + 'px');
+setTop();
+try { new ResizeObserver(setTop).observe(topEl); } catch (e) { window.addEventListener('resize', setTop); }
+buildWheel();
+defaultPanel();
+const h = (location.hash || '').slice(1);
+if (h && byId.has(h)) { refresh(); selectOrg(h, true); }
+else if (h && ['wheel', 'matrix', 'directory', 'openings', 'guide'].includes(h)) { setView(h); }
+else refresh();
+})();
+</script>

@@ -1,0 +1,153 @@
+<title>The Wider Field Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a field report. A sticky contents rail on the left, one reading column on the right; the atlas is a long run of specimen-style entries. */
+:root{
+  --bg:#f1f2ee; --surface:#fafbf8; --sunk:#e7e9e3; --ink:#17201e; --ink-2:#46514e; --ink-3:#6c7773; --line:#cdd3cb; --line-2:#e0e4de;
+  --accent:#3c56ac; --warn:#8a5200; --warn-bg:#f5ead6; --bar:#d3d9d0; --hatch:#bfc6be;
+  --display:"Newsreader","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Atkinson Hyperlegible Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121716; --surface:#192120; --sunk:#0d1211; --ink:#e4e9e3; --ink-2:#adb6b1; --ink-3:#7f8985; --line:#2d3836; --line-2:#212a28;
+  --accent:#8aa1ea; --warn:#e5b866; --warn-bg:#2a2417; --bar:#2f3b39; --hatch:#36423f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121716; --surface:#192120; --sunk:#0d1211; --ink:#e4e9e3; --ink-2:#adb6b1; --ink-3:#7f8985; --line:#2d3836; --line-2:#212a28;
+  --accent:#8aa1ea; --warn:#e5b866; --warn-bg:#2a2417; --bar:#2f3b39; --hatch:#36423f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 1rem/1.62 var(--sans);-webkit-font-smoothing:antialiased;margin:0}
+a{color:inherit;text-decoration-color:var(--ink-3);text-underline-offset:2px}
+a:hover{text-decoration-color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{text-wrap:balance}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:48px;max-width:1180px;margin:0 auto;padding-inline:max(16px,3vw);padding-block:0 80px}
+.rail{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding-block:36px 24px;font-size:.875rem}
+.rail .t{font:500 1.15rem/1.15 var(--display);margin:0 0 4px}
+.rail .d{font:500 .72rem/1.4 var(--mono);color:var(--ink-3);margin:0 0 18px;letter-spacing:.04em}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.rail li a{display:block;padding:3px 0;text-decoration:none;color:var(--ink-2)}
+.rail li a:hover{color:var(--ink)}
+.rail li.sub{display:flex;flex-direction:column;padding-left:12px;border-left:1px solid var(--line);margin:2px 0 6px}
+.rail li.sub a{font-size:.8125rem;padding:1px 0;color:var(--ink-3)}
+.rail .maplink{display:inline-block;margin-top:18px;border:1px solid var(--ink);border-radius:999px;padding:5px 12px;text-decoration:none;font-size:.8125rem}
+main{min-width:0;max-width:780px;padding-block:36px 0}
+.mast{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:28px}
+.eyebrow{font:500 .72rem/1.4 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
+.mast h1{font:500 clamp(2.4rem,5vw,3.6rem)/1 var(--display);letter-spacing:-.015em;margin:0 0 14px}
+.mast h1 i{font-weight:400}
+.mast .sub{font:400 1.25rem/1.45 var(--display);color:var(--ink-2);margin:0 0 18px;max-width:40ch}
+.mast .facts{display:flex;flex-wrap:wrap;gap:8px 22px;font:500 .8125rem/1.4 var(--mono);color:var(--ink-3)}
+.mast .facts b{color:var(--ink);font-weight:500}
+section{scroll-margin-top:16px}
+h2{font:500 1.9rem/1.15 var(--display);letter-spacing:-.01em;margin:56px 0 14px}
+h2.fam-h{font:500 .8rem/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:64px 0 0;border-top:2px solid var(--ink);padding-top:10px}
+h3{font:600 1.05rem/1.35 var(--sans);margin:28px 0 8px}
+p{margin:0 0 14px;max-width:68ch}
+ul,ol{max-width:66ch;padding-left:20px}
+li{margin-bottom:6px}
+.lede{font:400 1.12rem/1.55 var(--display);color:var(--ink)}
+.callout{border-left:3px solid var(--ink);padding:2px 0 2px 16px;margin:18px 0;font:italic 400 1.1rem/1.5 var(--display)}
+.kf{counter-reset:kf;list-style:none;padding:0}
+.kf>li{counter-increment:kf;position:relative;padding:14px 0 14px 46px;border-top:1px solid var(--line-2);margin:0}
+.kf>li::before{content:counter(kf,decimal-leading-zero);position:absolute;left:0;top:15px;font:500 .8rem/1 var(--mono);color:var(--ink-3)}
+.kf>li b{font-weight:600}
+figure{margin:24px 0 32px}
+figcaption{font-size:.875rem;color:var(--ink-3);margin-top:10px;max-width:68ch}
+.scroll{overflow-x:auto}
+.fig-table{border-collapse:collapse;width:100%;font-size:.875rem;font-variant-numeric:tabular-nums}
+.fig-table th,.fig-table td{padding:6px 10px;text-align:left;border-bottom:1px solid var(--line-2);vertical-align:top}
+.fig-table thead th{font:500 .7rem/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line)}
+.fig-table tr.fam th{font:500 .7rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:14px}
+.fig-table td{position:relative;min-width:64px}
+.fig-table .cellbar{position:absolute;left:6px;top:7px;bottom:7px;width:calc((100% - 12px) * var(--w) / 100);background:var(--bar);border-radius:0 3px 3px 0}
+.fig-table .num{position:relative;font-family:var(--mono);font-size:.8125rem}
+.fig-table td.zero{background:repeating-linear-gradient(45deg,transparent 0 4px,var(--line-2) 4px 5px)}
+.fig-table .pct{color:var(--ink-3)}
+.fig-table.funders td,.fig-table.funders th{font-size:.8125rem}
+.bars{display:flex;flex-direction:column;gap:10px}
+.brow{display:grid;grid-template-columns:200px minmax(0,1fr);gap:4px 14px;align-items:center;font-size:.875rem}
+.brow .bt{height:12px;background:var(--sunk);border-radius:0 4px 4px 0}
+.brow .bt i{display:block;height:100%;background:var(--ink-2);border-radius:0 4px 4px 0}
+.brow .bv{grid-column:2;font:500 .75rem/1.3 var(--mono);color:var(--ink-3)}
+.mx{border-collapse:collapse;font-size:.75rem}
+.mx th{font-weight:600;color:var(--ink-2);text-align:left;padding:2px 10px 2px 0;white-space:nowrap}
+.mx thead th{height:96px;vertical-align:bottom;padding:0}
+.mx thead th span{display:inline-block;transform:rotate(-55deg);transform-origin:left bottom;white-space:nowrap;width:26px;margin-left:12px;font-weight:600}
+.mx td{width:28px;height:26px;text-align:center;padding:0}
+.mx td i{display:inline-block;width:var(--d);height:var(--d);border-radius:50%;background:var(--ink-2);vertical-align:middle}
+.mx td.z b{display:inline-block;width:3px;height:3px;border-radius:50%;background:var(--hatch);vertical-align:middle}
+.op{border-top:1px solid var(--line);padding:18px 0 6px}
+.op h3{font:500 1.3rem/1.25 var(--display);margin:0 0 8px}
+.small{font-size:.875rem;color:var(--ink-2)}
+.k{font:500 .68rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-right:4px}
+.sector{border-top:1px solid var(--line);margin-top:40px;padding-top:6px}
+.sector h2{margin-top:6px}
+.missing{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:.95rem}
+.ring-h{font:500 .75rem/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin:30px 0 4px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.ring-h span{color:var(--ink-3);margin-left:6px}
+.ring-h.empty{color:var(--ink-3)}
+.entry{padding:14px 0;border-bottom:1px solid var(--line-2);scroll-margin-top:16px}
+.entry:target{background:var(--surface);box-shadow:-12px 0 0 var(--surface),12px 0 0 var(--surface)}
+.entry h4{font:600 1.02rem/1.35 var(--sans);margin:0 0 2px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.entry h4 a{text-decoration:none}
+.entry h4 a:hover{text-decoration:underline}
+.entry .meta{font:500 .75rem/1.45 var(--mono);color:var(--ink-3);margin:0 0 6px}
+.entry p{font-size:.94rem;margin-bottom:6px}
+.entry .why{font:italic 400 1rem/1.5 var(--display);color:var(--ink);border-left:2px solid var(--line);padding-left:10px}
+.entry .caveat{background:var(--warn-bg);padding:6px 10px;border-radius:4px;color:var(--ink)}
+.badge{font:500 .65rem/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);border-radius:3px;padding:0 5px;color:var(--ink-3)}
+.badge.ring{border-style:dashed}
+.badge.cm{border-color:var(--ink-2);color:var(--ink-2)}
+.badge.warn{border-color:var(--warn);color:var(--warn)}
+.index{columns:3 200px;column-gap:24px;font-size:.8125rem}
+.index a{display:block;padding:2px 0;break-inside:avoid;text-decoration:none;color:var(--ink-2)}
+.index a:hover{color:var(--ink);text-decoration:underline}
+.top{display:inline-block;margin-top:40px;font:500 .8rem var(--mono);color:var(--ink-3)}
+@media (max-width:900px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:0}
+  .rail{position:static;max-height:none;padding-block:24px 0;border-bottom:1px solid var(--line)}
+  .rail ol{flex-direction:row;flex-wrap:wrap;gap:4px 14px}
+  .rail li.sub{display:none}
+  .brow{grid-template-columns:minmax(0,1fr)}
+  .brow .bv{grid-column:1}
+}
+</style>
+
+<div class="wrap">
+  <nav class="rail" aria-label="Contents">
+    <p class="t">The Wider Field</p>
+    <p class="d">REPORT · __DATE__</p>
+    <ol>__TOC__</ol>
+    <a class="maplink" href="__MAPLINK__">Open the interactive map ↗</a>
+  </nav>
+  <main>
+    <header class="mast">
+      <p class="eyebrow">A report for integral altruism · __DATE__</p>
+      <h1>The <i>Wider</i> Field</h1>
+      <p class="sub">Who brings knowledge from outside mainstream AI safety to making advanced AI go well, how the space is shaped, and where it is open.</p>
+      <div class="facts"><span><b>__N__</b> organisations</span><span><b>14</b> traditions</span><span><b>4</b> rings of proximity</span><span><b>__CM__</b> (__CMPCT__%) on the aisafety.com map</span></div>
+    </header>
+
+    <section id="summary"><h2>Summary</h2>__SUMMARY__</section>
+    <section id="brief"><h2>The brief</h2>__BRIEF__</section>
+    <section id="organised"><h2>How the map is organised</h2>__ORGANISED__
+      <figure><div class="scroll">__FIG1__</div><figcaption>Figure 1. Organisations by home tradition and ring of proximity to the AI-safety core. Hatched cells: the sweep found none. The last column counts entries already on the aisafety.com field map.</figcaption></figure>
+    </section>
+    <section id="findings"><h2>What the map shows</h2>
+      <figure>__FIG2__<figcaption>Figure 2. Share of each family of traditions already on the aisafety.com map, and share in the core ring.</figcaption></figure>
+      __FINDINGS__
+      <figure>__FIG3__<figcaption>Figure 3. What organisations bring (rows) against what they work on (columns). Dot area grows with the count; small grey dots are empty cells. An organisation can work on up to three problems.</figcaption></figure>
+      <figure><div class="scroll">__FIG4__</div><figcaption>Figure 4. What flows where: for each family of traditions, the share of organisations whose work changes the AI models, the builders, institutions, or mainly their own community. Generalist funders excluded.</figcaption></figure>
+    </section>
+    <section id="openings"><h2>Openings</h2>__OPENINGS_INTRO____OPENINGS__</section>
+    <section id="atlas"><h2>The atlas</h2>__ATLAS_INTRO____ATLAS__</section>
+    <section id="funders"><h2>Funders</h2>__FUNDERS_INTRO____FUNDERS__</section>
+    <section id="inta"><h2>Taking it forward</h2>__INTA__</section>
+    <section id="method"><h2>Method and limits</h2>__METHOD__</section>
+    <section id="index"><h2>Index A–Z</h2>__INDEX__</section>
+    <a class="top" href="#summary">Back to the top ↑</a>
+  </main>
+</div>
