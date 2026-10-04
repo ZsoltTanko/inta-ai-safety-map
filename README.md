@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="docs/media/icon.png" width="112" height="112" alt="The Wider Field icon: the map's wheel of traditions and rings, dotted with organisations">
-
 # The Wider Field
 
 ### AI safety is bigger than its map.
@@ -48,8 +46,8 @@ In October 2026 the integral altruism (int/a) Europe group asked for a project t
       <p><b>See the whole field at once.</b><br>Every dot is an organisation, placed by the tradition it draws on and how close it sits to the AI-safety core. Click one for its profile: what it does, why it matters, key work, people, funding and how to get involved.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw"><img src="docs/media/map-lens.png" alt="The int/a member lens applied: the wheel filtered to organisations active in London, Berlin, Paris or online, coloured by integral quadrant"></a>
-      <p><b>Start from where you stand.</b><br>Six entry points (AI-safety funder, new funder, founder, someone from another field, AI-safety insider, int/a member) reframe the map around your question. Here: who works near int/a's hubs in London, Berlin and Paris.</p>
+      <a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw"><img src="docs/media/map-lenses.png" alt="Four small wheels of the same field, each lit differently: the AI-safety insider lens (266 organisations), the int/a member lens (243), the from-another-field lens (407) and the AI-safety funder lens (658)"></a>
+      <p><b>Start from where you stand.</b><br>Six entry points (AI-safety funder, new funder, founder, someone from another field, AI-safety insider, int/a member) reframe the map around your question. The same field lights up differently for each of them.</p>
     </td>
   </tr>
   <tr>
@@ -125,6 +123,13 @@ Each one names the part of the map it would fill, the organisations already near
 | Part of int/a | Who works near me, and where could int/a add something? | Map → *int/a member* |
 
 ## How it was made
+
+<p align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/pipeline-dark.png">
+  <img src="docs/media/pipeline-light.png" width="880" alt="Flowchart of the 342 agents that made the map, each drawn as a dot. Discovery sweep: 18 field finders, 1 critic and 7 gap finders found 596 candidates, which the main session curated to 552. Categorisation panel: 4 designers, 2 judges and 1 synthesiser produced 14 traditions, 14 problems and 4 rings. Blind-spot sweep: 10 finders added 171 organisations. Profiles and fact-checks: 104 profile writers and 104 fact-checkers, plus 36 duplicate or stopped runs, corrected 268 profiles and kept 722. In parallel, 24 coders checked reliability (99% agreement on home tradition) and 13 analysts proposed 52 openings, with 18 more declined or stopped. The main session merged and ranked them and built the map and the report.">
+</picture>
+</p>
 
 AI research agents swept 18 adjacent fields and then a second round of blind spots. They profiled each organisation from its own site and other sources, and tagged it against written rules for 14 traditions, 14 problems and four rings. The categories were designed by four independent designers and scored by two judges with opposite priorities. A second agent fact-checked every profile and corrected 268 of them. Two further coders re-tagged a sample without seeing the original tags, and agreed on an organisation's home tradition 99% of the time.
 
