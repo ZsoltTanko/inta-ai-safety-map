@@ -237,9 +237,31 @@ def pipeline(dark):
     bg = '#0d1117' if dark else '#f1f2ee'
     magick(raw, '-background', bg, '-bordercolor', bg, '-trim', '+repage', '-border', '64', '-resize', '1600x', '-strip', '-define', 'png:compression-level=9', os.path.join(OUT, f'pipeline-{tag}.png'))
 
+# ---------- social preview card (upload by hand: Settings > Social preview) ----------
+SOCIAL_CSS = """<style>
+.top,.filters,.panel,.legend,.foot,.active-filters,.lens,#tip{display:none!important}
+html,body{height:100%;overflow:hidden}.app{min-height:0}.main{display:block!important}
+.stage{padding:0 0 0 64px!important;display:grid!important;grid-template-columns:560px 610px;align-items:center;gap:20px;height:640px}
+#card{display:flex;flex-direction:column;gap:18px}
+#card .eb{font:500 14px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+#card h1{font:500 76px/0.95 var(--display);margin:0;letter-spacing:-.02em}#card h1 i{font-weight:400}
+#card .tg{font:400 30px/1.25 var(--display);color:var(--ink-2);max-width:15ch}
+#card .facts{font:500 17px/1.6 var(--mono);color:var(--ink-3);margin-top:8px}
+.wheel-box{max-width:none!important;width:610px!important}
+</style>
+<script>setTimeout(()=>{const s=document.querySelector('.stage');const c=document.createElement('div');c.id='card';
+c.innerHTML='<div class="eb">For integral altruism</div><h1>The <i>Wider</i> Field</h1><div class="tg">AI safety is bigger than its map.</div><div class="facts">722 organisations · 14 traditions<br>42 ranked openings</div>';
+s.insertBefore(c,s.firstChild);},400)</script>"""
+
+def social():
+    raw = shot(page('wider-field-map.html', SOCIAL_CSS), os.path.join(TMP, 'social-raw.png'), 1280, 640)
+    magick(raw, '-resize', '1280x640!', '-strip', '-define', 'png:compression-level=9', os.path.join(OUT, 'social-preview.png'))
+
 if __name__ == '__main__':
     import sys
-    parts = sys.argv[1:] or ['hero', 'tiles', 'lenses', 'report', 'pipeline']
+    parts = sys.argv[1:] or ['hero', 'tiles', 'lenses', 'report', 'pipeline', 'social']
+    if 'social' in parts:
+        social()
     if 'hero' in parts:
         for d in (False, True):
             print(hero(d))
