@@ -25,7 +25,7 @@
 
 ## Why this exists
 
-The standard map of the AI-safety field lists about 370 organisations, sorted by what they do. It's a good guide to the core, and it says almost nothing about the fields around it: the psychiatrists already seeing AI-associated delusions, the engineers who certify aircraft software, the jurists whose rulings reach a billion people, the mediators who de-escalate conflicts for a living. **Of the 722 organisations on this map, only 64 appear on that one.**
+The aisafety.com field map lists about 370 organisations working on AI safety, grouped by what they do, such as research, governance, advocacy and funding. Its focus is the core of the field. This map covers the organisations around that core that bring knowledge from other disciplines and traditions to making advanced AI go well. It places each one by the tradition it draws on and by how close it sits to AI safety. **Of the 722 organisations here, 64 also appear on the aisafety.com map.**
 
 In October 2026 the integral altruism (int/a) Europe group asked for a project that would *widen* the field, not just found more of what it already has: map the adjacent fields, make them legible to funders, and give founders a concrete list of problems. This is that map.
 
@@ -93,23 +93,6 @@ Also in the map:
 - **The inner side of the field is the thinnest.** Only 10 organisations offer direct care to the people doing the work, and one of them has been paused since 2023.
 
 The report also covers where the money is, including the large new funders of 2025–26, and how int/a could take the map forward. It closes with the method, its limits and an A–Z index.
-
-## Ten places to start
-
-The report ranks 42 openings. These are the first ten:
-
-1. **Confidential near-miss reporting** for frontier AI, on the model of aviation's ASRS and medicine's patient-safety systems.
-2. **Test contemplative "no-self" training** against the field's own shutdown, self-preservation and sycophancy evaluations, nulls included.
-3. **A clinician reporting scheme** that turns AI-linked psychiatric cases into model evaluations, borrowed from pharmacovigilance.
-4. **A fellowship placing system-safety and human-factors engineers** in AI-safety teams.
-5. **A cross-cultural wisdom benchmark** built on validated measures from wisdom psychology.
-6. **A co-funded call bringing comparative cognition**, a century of controls against over-reading animal minds, into evaluations of AI agency and deception.
-7. **An independent audit lab for AI facilitators** that now summarise public deliberation.
-8. **Clearance-aware care for AI-safety staff**, with a safeguarding standard for the programmes the field refers people to.
-9. **Make the mapping itself int/a's practice:** one session per tradition, in which practitioners correct their own sector.
-10. **A joint clinician–philosopher programme** on people who come to believe their AI is conscious.
-
-Each one names the part of the map it would fill, the organisations already nearby, and first steps. [Read them all →](https://claude.ai/artifact/ThNQqeD4nn1caCT9ihWwHL)
 
 ## Who it's for
 
