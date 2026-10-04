@@ -1,53 +1,159 @@
+<div align="center">
+
+<img src="docs/media/icon.png" width="112" height="112" alt="The Wider Field icon: the map's wheel of traditions and rings, dotted with organisations">
+
 # The Wider Field
 
-A map of organisations that bring knowledge from outside mainstream AI safety to making advanced AI go well, made for the integral altruism (int/a) community in October 2026.
+### AI safety is bigger than its map.
 
-- **Interactive map:** https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw
-- **Report:** https://claude.ai/artifact/ThNQqeD4nn1caCT9ihWwHL
+722 organisations that bring other fields' knowledge to making advanced AI go well, from psychiatry and contemplative science to arms control, actuarial science and Indigenous data sovereignty. One interactive map, one report, and 42 places where the field is still open.
 
-722 organisations are placed by the tradition of knowledge they bring (14 traditions in four families) and by their distance from the AI-safety core (four rings: core, bridge, adjacent, potential). The report adds findings, 42 ranked openings for founders, funders and int/a, a funders section, and the method and its limits.
+<a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw"><img alt="Explore the interactive map" src="https://img.shields.io/badge/Explore%20the%20interactive%20map%20%E2%86%92-3c56ac?style=for-the-badge"></a>
+&nbsp;
+<a href="https://claude.ai/artifact/ThNQqeD4nn1caCT9ihWwHL"><img alt="Read the report" src="https://img.shields.io/badge/Read%20the%20report%20%E2%86%92-17201e?style=for-the-badge"></a>
 
-## Layout
+<br>
 
-| Path | What it is |
-|---|---|
-| `dist/` | The built pages, as published: `wider-field-map.html` and `wider-field-report.html` |
-| `src/` | Templates and build scripts for both pages |
-| `src/pipeline/` | Scripts that ran against the research agents' outputs during the original session; kept as a record, not runnable from this repo |
-| `data/` | The verified dataset (`profiles.json`), the taxonomy, the analysts' notes, the synthesis, and fact-check and reliability results |
-| `research/` | The brief, the seed list, discovery notes, candidate lists and the categorisation panel's output |
-| `workflows/` | The multi-agent workflow scripts that did the discovery, categorisation, profiling, fact-checking and gap analysis (their `DIR` paths pointed at a scratch folder) |
+<a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/hero-dark.gif">
+  <img src="docs/media/hero-light.gif" width="900" alt="The map's wheel. First only the 64 organisations on the standard map of the AI-safety field are lit; then the rings fill in from the core outwards until all 722 organisations are lit.">
+</picture>
+</a>
 
-## Rebuilding the pages
+<sub>Each dot is an organisation. Sectors are traditions of knowledge; rings are distance from the AI-safety core.</sub>
 
-Python 3, no dependencies.
+</div>
+
+## Why this exists
+
+The standard map of the AI-safety field lists about 370 organisations, sorted by what they do. It's a good guide to the core, and it says almost nothing about the fields around it: the psychiatrists already seeing AI-associated delusions, the engineers who certify aircraft software, the jurists whose rulings reach a billion people, the mediators who de-escalate conflicts for a living. **Of the 722 organisations on this map, only 64 appear on that one.**
+
+In October 2026 the integral altruism (int/a) Europe group asked for a project that would *widen* the field, not just found more of what it already has: map the adjacent fields, make them legible to funders, and give founders a concrete list of problems. This is that map.
+
+<div align="center">
+
+| **722** | **14** | **9%** | **43 of 196** | **42** |
+|:---:|:---:|:---:|:---:|:---:|
+| organisations, profiled and fact-checked | traditions of knowledge, in four families | already on the standard field map | combinations of tradition and problem with nobody working on them | ranked openings for founders, funders and int/a |
+
+</div>
+
+## The interactive map
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw"><img src="docs/media/map-entry.png" alt="The wheel with the Center for the Study of Apparent Selves selected, and its profile open in the side panel"></a>
+      <p><b>See the whole field at once.</b><br>Every dot is an organisation, placed by the tradition it draws on and how close it sits to the AI-safety core. Click one for its profile: what it does, why it matters, key work, people, funding and how to get involved.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw"><img src="docs/media/map-lens.png" alt="The int/a member lens applied: the wheel filtered to organisations active in London, Berlin, Paris or online, coloured by integral quadrant"></a>
+      <p><b>Start from where you stand.</b><br>Six entry points (AI-safety funder, new funder, founder, someone from another field, AI-safety insider, int/a member) reframe the map around your question. Here: who works near int/a's hubs in London, Berlin and Paris.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw"><img src="docs/media/map-matrix.png" alt="The matrix view: traditions as rows, problems as columns, dots sized by the number of organisations, small grey dots for empty cells"></a>
+      <p><b>Find the empty niches.</b><br>Cross what organisations bring with what they work on. Every small grey dot is a place where the knowledge exists and nobody has carried it across yet.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://claude.ai/artifact/MrKYZmhwbuxCf2tf3cmcnw"><img src="docs/media/map-openings.png" alt="The openings view: ranked cards, the first ten marked Start here, each naming who it is for and the organisations nearby"></a>
+      <p><b>Act on it.</b><br>42 openings, ranked, each grounded in the map: what is missing, what would fill it, who is already nearby, and the first steps.</p>
+    </td>
+  </tr>
+</table>
+
+Also in the map:
+
+- **Filters** by ring, tradition, problem, what an organisation does, how to get involved, region and status, with live counts.
+- **Lenses from int/a's own frames:** colour the wheel by integral quadrant, by *what flows where* (does a field's knowledge reach the AI models, the people who build them, institutions, or mainly its own community?) or by what each organisation says is at stake.
+- **Ask the map** a question in plain words, such as *"Who in Europe works on care-based alignment?"*, and the answer is highlighted on the wheel. This uses your own Claude account.
+- **Link to any organisation** directly, and switch between light and dark mode. It also works on a phone.
+
+## The report
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://claude.ai/artifact/ThNQqeD4nn1caCT9ihWwHL"><img src="docs/media/report.png" alt="The report's opening page: title, key figures and the numbered summary"></a>
+      <p><b>Findings you can cite.</b><br>The shape of the wider field in ten findings and four figures, with the numbers behind each.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://claude.ai/artifact/ThNQqeD4nn1caCT9ihWwHL"><img src="docs/media/report-atlas.png" alt="The report's chapter on contemplative and integral traditions: an overview, what is missing, and entries by ring"></a>
+      <p><b>The full atlas.</b><br>All 722 organisations, tradition by tradition and ring by ring, each with what it does, why it matters and how to get involved.</p>
+    </td>
+  </tr>
+</table>
+
+**Some of what the report finds:**
+
+- **The field's visibility tracks distance from the sciences.** 15% of science and engineering organisations are on the standard map, against 3% of those in psychology, contemplative traditions, religion and consciousness research. Consciousness and AI-minds research has 11 core AI-safety organisations, and none of them is on the standard map.
+- **The largest bodies of knowledge sit furthest out.** Law, rights and society has 91 organisations and only 2 in the core. Indigenous and decolonial knowledges have none.
+- **Adjacent fields mostly talk to their own people.** 123 organisations move their knowledge into AI models, and only 26 into the people who build and govern AI.
+- **AI safety borrowed older safety cultures' artefacts, not their institutions.** It has safety cases and incident databases, but no confidential near-miss reporting, independent accident investigation or bioethics-style oversight board was found.
+- **The inner side of the field is the thinnest.** Only 10 organisations offer direct care to the people doing the work, and one of them has been paused since 2023.
+
+The report also covers where the money is, including the large new funders of 2025–26, and how int/a could take the map forward. It closes with the method, its limits and an A–Z index.
+
+## Ten places to start
+
+The report ranks 42 openings. These are the first ten:
+
+1. **Confidential near-miss reporting** for frontier AI, on the model of aviation's ASRS and medicine's patient-safety systems.
+2. **Test contemplative "no-self" training** against the field's own shutdown, self-preservation and sycophancy evaluations, nulls included.
+3. **A clinician reporting scheme** that turns AI-linked psychiatric cases into model evaluations, borrowed from pharmacovigilance.
+4. **A fellowship placing system-safety and human-factors engineers** in AI-safety teams.
+5. **A cross-cultural wisdom benchmark** built on validated measures from wisdom psychology.
+6. **A co-funded call bringing comparative cognition**, a century of controls against over-reading animal minds, into evaluations of AI agency and deception.
+7. **An independent audit lab for AI facilitators** that now summarise public deliberation.
+8. **Clearance-aware care for AI-safety staff**, with a safeguarding standard for the programmes the field refers people to.
+9. **Make the mapping itself int/a's practice:** one session per tradition, in which practitioners correct their own sector.
+10. **A joint clinician–philosopher programme** on people who come to believe their AI is conscious.
+
+Each one names the part of the map it would fill, the organisations already nearby, and first steps. [Read them all →](https://claude.ai/artifact/ThNQqeD4nn1caCT9ihWwHL)
+
+## Who it's for
+
+| If you are… | Your question | Start here |
+|---|---|---|
+| Funding AI safety | What relevant knowledge aren't my grantees using? | Map → *AI-safety funder* |
+| A new funder | Where could money open something untried? | Map → *Openings* → *For funders* |
+| A founder | Which niches are empty, and who could I build with? | Map → *Matrix*, then *Openings* |
+| From another field | Who in my field already works on AI going well? | Map → *From another field* |
+| Working in AI safety | What is in my blind spot? | Map → *AI-safety insider* |
+| Part of int/a | Who works near me, and where could int/a add something? | Map → *int/a member* |
+
+## How it was made
+
+AI research agents swept 18 adjacent fields and then a second round of blind spots. They profiled each organisation from its own site and other sources, and tagged it against written rules for 14 traditions, 14 problems and four rings. The categories were designed by four independent designers and scored by two judges with opposite priorities. A second agent fact-checked every profile and corrected 268 of them. Two further coders re-tagged a sample without seeing the original tags, and agreed on an organisation's home tradition 99% of the time.
+
+It is a first draft, and its limits are stated plainly in the report. Expect errors in individual details. Coverage leans English-language: 55% of entries are in North America or the UK and Ireland. The openings are well-grounded hypotheses, not tested plans.
+
+## Help make it better
+
+If you know a field, you can make its sector more accurate. Use **Suggest an addition or correction** in the map, or [open an issue](https://github.com/ZsoltTanko/inta-ai-safety-map/issues). The report proposes taking this further as an int/a practice, reviewed one tradition at a time by the people who know them.
+
+<details>
+<summary><b>For AI agents and anyone rebuilding the pages</b></summary>
+
+<br>
+
+- `dist/` holds the two pages as published. The live versions are linked above.
+- `data/profiles.json` is the dataset: one record per organisation, with tags whose keys are defined in `data/taxonomy.md`.
+- `data/synthesis.json` holds the openings, findings and essays. `src/texts.py` holds the fixed prose.
+- `research/` and `workflows/` are the record of how the data was gathered. Their paths point at the original working folder, so they don't run from here.
+
+Rebuild both pages with Python 3 and no dependencies:
 
 ```bash
-python3 src/synth.py
+python3 src/synth.py && python3 src/assemble.py && python3 src/build_map.py && python3 src/build_report.py
 ```
 
-```bash
-python3 src/assemble.py
-```
+`src/media/make_media.py` regenerates the README images; it needs Google Chrome, ffmpeg and ImageMagick.
 
-```bash
-python3 src/build_map.py
-```
+</details>
 
-```bash
-python3 src/build_report.py
-```
+## License
 
-`synth.py` selects and ranks the openings and writes the findings and essays into `data/synthesis.json`. `assemble.py` combines that with the analysts' notes and the fixed texts in `src/texts.py` into `data/map_extra.json`. The two build scripts write the pages into `dist/`. `assemble.py` takes the map and report links as optional arguments.
-
-To change an organisation, edit its entry in `data/profiles.json` (tags must use keys from `data/taxonomy.md`) and rebuild.
-
-## How it was made, and its limits
-
-AI research agents swept 18 adjacent fields and then a second set of blind spots, profiled each organisation from its own site and other sources, and tagged it against the written rules in `data/taxonomy.md`. A second agent fact-checked every profile and corrected 268 of them. Two further coders re-tagged a sample blind to check consistency. The full method is in the report.
-
-- Expect errors in individual entries, especially dates, people and funding. Every entry lists its sources.
-- The research agents' web-search budget ran out early, so most checking was done by reading organisations' own sites.
-- Coverage leans English-language: 55% of entries are in North America or the UK and Ireland.
-- The openings were not individually tested against the open web; ten were spot-checked.
-- The aisafety.com field map was used to mark which organisations it already lists; that copy is not included here.
+[MIT](LICENSE). Organisation descriptions were written for this project, and each entry links its sources.
